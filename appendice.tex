@@ -1,0 +1,151 @@
+\chapter{Parti significative del codice dell'applicazione}
+\section{Funzione principale dello scanner}
+\begin{lstlisting}
+/**
+ *  Implementation of the crawler function.
+ *  Flow: 
+ *  1- set crawler_id but leave status = 0
+ *  2- make status = 1
+ *  3- make status = 2
+ */
+function crawler_framework($selection_query, $initial_status, $function_callback) {
+  // Initialize the crawler
+  db_query("INSERT INTO {crawler} VALUES (default)");
+  $crawler_id = db_last_insert_id('crawler', 'id');
+  $selection_query += array(
+    'join' => '',
+    'where' => '',
+    'parameters' => array(),
+  );
+  $fields = empty($selection_query['fields']) ? '' : ','. implode(', ', $selection_query['fields']);
+  $sql = 'SELECT l.path'. $fields .' FROM {crawler_links} AS l '. $selection_query['join'] .' WHERE crawler_id = %d and status = %d'. $selection_query['where'];
+  array_unshift($selection_query['parameters'], $crawler_id, $initial_status+1);
+  // Set execution time calc
+  $time_old = time();
+  // While max execution time is not reached and there's something to process inside crawler_links table (time() < $time_limit) && 
+  while ((db_fetch_array(db_query_range("SELECT * FROM {crawler_links} WHERE status = %d", $initial_status, 0, 1)) != NULL)) {
+    $status = $initial_status;
+    //Mark the extracted page as visited
+    $status++;
+    db_query("UPDATE {crawler_links} SET crawler_id = %d, status = %d WHERE status = %d LIMIT 1", $crawler_id, $status, $initial_status);
+    // Get the link from crawler_links table
+    $selected_results = db_fetch_array(db_query_range($sql, $selection_query['parameters'], 0, 1));
+    // Update the status field to sign as executed that link
+    // (The following two lines could be move to the end of the function i think without problems) 
+    db_query("UPDATE {crawler_links} SET status = status + 1 WHERE status = %d AND crawler_id = %d", $status, $crawler_id);
+    $status++;
+    // Create a new object and parse the page
+    $obj = new drupal_security_scanner_test();
+    // Set the cookie
+    $session_cookie = variable_get('security_scanner_cookie', '');
+    $obj->curl_options = array(
+      CURLOPT_COOKIE => $session_cookie,
+      CURLOPT_USERAGENT => 'security_scanner',
+    );
+    $obj->drupalGet($selected_results['path']);
+    $obj->parse();
+    $function_callback($obj, $selected_results);
+    $obj->curlClose();
+  }
+  echo "<h2>Process Finished!</h2><br />";
+  $execution_time = time() - $time_old;
+  echo "<h4>Execution time: ". $execution_time ."seconds.</h4><br />";
+  // Get the location of the website and put a link for that
+  $exploded = explode("/", $_SERVER['PHP_SELF']);
+  $url = array_slice($exploded, 0, -1);
+  $url = implode("/", $url);
+  echo "<h3>Back to your <a href=\"". $url ."\">Drupal WebSite</a></h3>";
+}
+\end{lstlisting}
+\section{Funzione di callback per il crawling del sito}
+\begin{lstlisting}
+/**
+ *  Crawler: page processing function
+ */     
+function security_scanner_page_processing($obj, $selected_results) {
+  global $base_url;
+  $links = $obj->elements->xpath('//a');
+  foreach ($links as $link) {
+    $url_to_save = (string)$link->attributes()->href;
+    $absolute = getAbsoluteUrl($url_to_save);
+    // Get the page but check:
+    // a - if it's logout link, that makes me lose the cookie.
+    // b - if it's security scanner, skip
+    // c - if it's xss_injector, skip. That will launch the crawler
+    // d - if it's cron.php, skip. that will make a loop
+    $parsed_url = parse_url($absolute);
+    $file = basename($absolute);
+    if (!isset($parsed_url['query']))
+      $parsed_url['query'] = '';
+    if (($parsed_url['query'] != 'q=logout') && ($parsed_url['query'] != 'q=admin/settings/security_scanner') && ($parsed_url['query'] != 'q=admin/reports/updates') && ($parsed_url['query'] != 'q=admin/settings/xss_injector') && ($file != 'cron.php')) {  
+      if (substr($absolute, 0, strlen($base_url)) == $base_url) {
+        // Here we use IGNORE to insert only one time a link into the table. ("path" is a unique index)
+        db_query("INSERT IGNORE INTO {crawler_links} (id, path, crawler_id, status) VALUES ('','%s','','')", $absolute);
+      }
+    }
+  }
+  // Get the forms inside the page
+  $inputs = $obj->elements->xpath("//input[@name='form_id']");
+  foreach ($inputs as $input) {
+    $form_id = (string)$input->attributes()->id;
+    // Debug line! HAS TO BE REMOVED
+    // echo $form_id."Form inserted! <br />";
+    // Here we use again IGNORE to insert only one time a form_id into the table. ("form_id" is the primary key)
+    db_query("INSERT IGNORE INTO {crawler_forms} VALUES ('%s','%d')", $form_id, $selected_results['id']);
+  }
+}
+\end{lstlisting}
+\section{Funzione di callback per seeding del sito}
+\begin{lstlisting}
+/**
+ *  xss_injector_page_processing: This function is called from the crawler_framework() with a callback.
+ *  It executes the operations on the page that is visited.   
+ */
+function xss_injector_seeding_process($obj, $selected_results) {
+  // Selecting only textareas and input type = 'text' into the form with form_id specified before seeding
+  $xpath = "//input[@name='form_id' and @type='hidden' and @id='". $selected_results['id'] ."']//..//input[@type='text']|//textarea";
+  $all_inputs = $obj->elements->xpath($xpath);
+  // If I find a field textarea or an input type = text field i seed, otherwise i skip the seeding process
+  if (!empty($all_inputs)) {
+    foreach ($all_inputs as $input) {
+      $form_id = $selected_results['id'];
+      $name = (string)$input->attributes()->name;
+      $pattern = variable_get('security_scanner_pattern', '<script>alert(\'xss\');</script>') . $form_id;
+      $edit[$name] = $pattern;
+    }
+    $obj->drupalPost($selected_results['path'], $edit, TRUE);
+  }
+}
+\end{lstlisting}
+\section{Funzione di callback per la ricerca di pattern eseguiti}
+\begin{lstlisting}
+/**
+ *  xss_injector_find_seeds() is a function called back from the crawler_framework
+ *  to enable a search into the pages finding seeds
+ */
+function xss_injector_find_seeds($obj, $selected_results) {
+  // I cannot have the form_id here, what i seeded could be on any page, so i have to loop
+  // on every form_id and search into the page if this appears.
+  $forms_id = db_query("SELECT id FROM {crawler_forms}");
+  while ($form_id_array = db_fetch_array($forms_id)) {
+    $form_id = $form_id_array['id'];
+    $pattern = variable_get('security_scanner_pattern', '<script>alert(\'xss\');</script>') . $form_id;
+    $position = strpos($obj->_content, $pattern);
+    // If I find an occurrence of this it means that the xss injection was succesful, so report the error!
+    if (!empty($position)) {
+      // Save the seeds founded into the database if not exists
+      $discovered_xss = array("form_id" => $form_id, "executed_on_page" => $selected_results['path']);
+      $seeds_founds = variable_get('security_scanner_unprotected_forms', array());
+      $signal = TRUE;
+      foreach ($seeds_founds as $value) {
+        if ($value['form_id'] == $form_id)
+          $signal = FALSE;
+      }
+      if ($signal == TRUE) {
+        $seeds_founds[] = $discovered_xss;
+        variable_set('security_scanner_unprotected_forms', $seeds_founds);
+      }
+    }
+  }
+}
+\end{lstlisting}

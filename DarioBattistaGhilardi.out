@@ -1,0 +1,27 @@
+\BOOKMARK [0][-]{chapter.1}{Introduzione}{}
+\BOOKMARK [0][-]{chapter.2}{Motivazione}{}
+\BOOKMARK [0][-]{chapter.3}{Sicurezza di applicazioni web}{}
+\BOOKMARK [1][-]{section.3.1}{Fondamenti di sicurezza}{chapter.3}
+\BOOKMARK [1][-]{section.3.2}{Vulnerabilit\340 nelle applicazioni web}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.2.1}{Injection}{section.3.2}
+\BOOKMARK [2][-]{subsection.3.2.2}{Cross site scripting}{section.3.2}
+\BOOKMARK [2][-]{subsection.3.2.3}{Broken authentication and session management}{section.3.2}
+\BOOKMARK [2][-]{subsection.3.2.4}{Insecure direct object references}{section.3.2}
+\BOOKMARK [1][-]{section.3.3}{Una proposta di development cycle che include la security}{chapter.3}
+\BOOKMARK [0][-]{chapter.4}{Analisi Statica}{}
+\BOOKMARK [1][-]{section.4.1}{Storia}{chapter.4}
+\BOOKMARK [1][-]{section.4.2}{Applicazioni}{chapter.4}
+\BOOKMARK [1][-]{section.4.3}{Analisi statica vs. analisi dinamica vs. code review}{chapter.4}
+\BOOKMARK [0][-]{chapter.5}{Applicazione dell'analisi statica alla sicurezza di applicazioni web}{}
+\BOOKMARK [0][-]{chapter.6}{Analisi statica di codice PHP}{}
+\BOOKMARK [0][-]{chapter.7}{Comparazione dei principali tool esistenti}{}
+\BOOKMARK [1][-]{section.7.1}{Pixy}{chapter.7}
+\BOOKMARK [1][-]{section.7.2}{Saner}{chapter.7}
+\BOOKMARK [1][-]{section.7.3}{RIPS}{chapter.7}
+\BOOKMARK [0][-]{chapter.8}{Vulture}{}
+\BOOKMARK [1][-]{section.8.1}{Problematiche}{chapter.8}
+\BOOKMARK [1][-]{section.8.2}{Sviluppi futuri}{chapter.8}
+\BOOKMARK [0][-]{chapter.9}{Discussione}{}
+\BOOKMARK [0][-]{chapter.10}{Conclusioni}{}
+\BOOKMARK [0][-]{chapter.11}{Conclusioni}{}
+\BOOKMARK [0][-]{chapter.11}{Bibliografia}{}

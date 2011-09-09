@@ -1,0 +1,28 @@
+\select@language {italian}
+\contentsline {chapter}{\numberline {1}Introduzione}{1}{chapter.1}
+\contentsline {chapter}{\numberline {2}Motivazione}{3}{chapter.2}
+\contentsline {chapter}{\numberline {3}Sicurezza di applicazioni web}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}Fondamenti di sicurezza}{5}{section.3.1}
+\contentsline {section}{\numberline {3.2}Vulnerabilit\IeC {\`a} nelle applicazioni web}{6}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Injection}{7}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Cross site scripting}{8}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Broken authentication and session management}{9}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}Insecure direct object references}{9}{subsection.3.2.4}
+\contentsline {section}{\numberline {3.3}Una proposta di development cycle che include la security}{9}{section.3.3}
+\contentsline {chapter}{\numberline {4}Analisi Statica}{11}{chapter.4}
+\contentsline {section}{\numberline {4.1}Storia}{12}{section.4.1}
+\contentsline {section}{\numberline {4.2}Applicazioni}{12}{section.4.2}
+\contentsline {section}{\numberline {4.3}Analisi statica vs. analisi dinamica vs. code review}{13}{section.4.3}
+\contentsline {chapter}{\numberline {5}Applicazione dell'analisi statica alla sicurezza di applicazioni web}{15}{chapter.5}
+\contentsline {chapter}{\numberline {6}Analisi statica di codice PHP}{17}{chapter.6}
+\contentsline {chapter}{\numberline {7}Comparazione dei principali tool esistenti}{19}{chapter.7}
+\contentsline {section}{\numberline {7.1}Pixy}{19}{section.7.1}
+\contentsline {section}{\numberline {7.2}Saner}{19}{section.7.2}
+\contentsline {section}{\numberline {7.3}RIPS}{19}{section.7.3}
+\contentsline {chapter}{\numberline {8}Vulture}{21}{chapter.8}
+\contentsline {section}{\numberline {8.1}Problematiche}{21}{section.8.1}
+\contentsline {section}{\numberline {8.2}Sviluppi futuri}{21}{section.8.2}
+\contentsline {chapter}{\numberline {9}Discussione}{23}{chapter.9}
+\contentsline {chapter}{\numberline {10}Conclusioni}{25}{chapter.10}
+\contentsline {chapter}{\numberline {11}Conclusioni}{27}{chapter.11}
+\contentsline {chapter}{Bibliografia}{28}{chapter.11}

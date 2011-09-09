@@ -1,0 +1,138 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Stile Latex per la stesura della tesi di laurea presso il
+%% Dipartimento di Tecnologie dell'Informazione di Crema
+%%
+%% Opzioni disponibili da utilizzare in \documentclass:
+%%
+%% correlatore
+%% 		l'opzione permette di visualizzare, se presente il correlatore
+%% 		della tesi
+%%
+%% linea
+%%		permette la visualizzazione di una sottile linea per header e
+%%		e footer
+%%
+%% [ informatica | sicurezza | ts | magistrale ] (informatica e' il default value)
+%%		imposta il corso di laurea con la corretta dicitura
+%%		informatica: Corso di Laurea in Informatica (Crema)
+%%		sicurezza: Corso di Laurea in Sicurezza dei Sistemi e delle Reti Informatiche
+%% 		ts: Corso di Laurea in Tecnologie per la Societ\`a dell'Informazione
+%% 		magistrale: Corso di Laurea in Scienze e Tecnologie dell'Informazione
+%%
+%% titoliSinistra
+%%		con l'impostazione fronteretro la prima pagina di un capitolo e' dispari;
+%%		in fase di rilegatura il titolo del capitolo risulterebbe a destra e quindi all'interno;
+%%		con questa opzione si aumenta la visibilita' del titolo
+%%
+%% [ righeNumerate | righeNumeratePerPagina ]
+%%		l'opzione permette di inserire un numerino progressivo su ogni riga di testo
+%% 		per permettere una piu' facile indicazione in caso di invio delle correzioni in
+%%		forma elettronica
+%%
+%% prefazione
+%%		l'opzione permette l'inclusione di una prefazione il cui testo deve essere 
+%%		obbligatoriamente contenuta nel file prefazione.tex
+%%
+%% [ listaFigureInizio | listaFigureFine ]
+%%		l'opzione permette l'inclusione della lista delle figure prima oppure dopo
+%% 		il testo della tesi; di default, nessuna lista delle figure e' inclusa
+%%
+%% [ listaTabelleInizio | listaTabelleFine ]
+%%		l'opzione permette l'inclusione della lista delle tabelle prima oppure dopo
+%% 		il testo della tesi; di default, nessuna lista delle tabelle e' inclusa
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[magistrale,prefazione,linea,titoliSinistra,listaFigureFine,listaTabelleFine]{DarioBattistaGhilardi_Styles}
+
+
+%% Completare con le informazioni relative alla tesi
+%%
+\TitoloTesi{Tecniche di analisi statica per la sicurezza di applicazioni web: problematiche ed implementazioni}
+\Relatore{Prof. Marco Cremonini}
+\Candidato{Dario Battista Ghilardi}
+\Matricola{753708}
+\AnnoAccademico{Anno Accademico 2010/2011}
+
+%% introduzione di pacchetti aggiuntivi
+
+
+%% introduzione di comandi ad hoc
+%% qui e' possibile aggiungere altri providecommand!
+%% 
+
+%% \sphline puo' essere usato in alternativa a \hline per lo 
+%% spazio tra due righe nella stessa tabella
+%% 
+\providecommand{\sphline}{
+  \noalign{\vskip2pt}\\
+ \hline
+  \noalign{\vskip2pt}\\
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% sezione include
+%% il comando \includeonly elenca i files con il sorgente latex da 
+%% includere in fase di creazione del testo tra quelli elencati in 
+%% seguito col comando \include
+
+\includeonly{
+	capitolo1,
+	capitolo2,
+	capitolo3,
+	capitolo4,
+	%capitolo5,
+	%capitolo6,
+	%appendice
+}
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% SEZIONE TESTO DELLA TESI
+
+%% usare il comando part se si vuole separare la tesi in parti distinte
+%% esempio: \part{Titolo Parte}
+
+\include{capitolo1}
+
+\include{capitolo2}
+
+\include{capitolo3}
+
+\include{capitolo4}
+
+%\include{capitolo5}
+
+%\include{capitolo6}
+
+%\appendix
+
+%\include{appendice}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Bibliografia attraverso BIBTEX: possibili stili per la biblografia
+%%
+%% Da: http://amath.colorado.edu/documentation/LaTeX/basics/steps/bibstyles.html
+%%
+%% plain: Entries are ordered alphabetically
+%%
+%% unsrt: Entries are not ordered alphabetically, but in the order they are first referenced.
+%%
+%% abbrv: The bibliography looks the same as for plain style except that first names and names 
+%%        of journals and months are abbreviated;
+%%
+%% alpha: The bibliography looks the same as for plain style except that the reference markers 
+%%        are not just 1,2,3... but are based on authors' initials and publication year;
+%% 
+\addcontentsline{toc}{chapter}{Bibliografia} 
+\bibliographystyle{plain}
+\bibliography{bibliografia}
+\nocite{*}
+
+\end{document}
