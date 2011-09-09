@@ -33,9 +33,9 @@ OWASP (Open Web Application Security Project) è un gruppo composto da volontari
 Gli obiettivi di OWASP sono i seguenti:\begin{itemize}
 \item Diffondere la cultura dello sviluppo di applicativi web sicuri.
 \item Contribuire alla sensibilizzazione sia dei professionisti che delle aziende verso le problematiche di Web Security, attraverso la circolazione di idee, articoli, best- practice e tool.
-\item Promuovere l’uso di metodologie e tecnologie che consentano di migliorare il livello di sicurezza della realta` web.
+\item Promuovere l’uso di metodologie e tecnologie che consentano di migliorare il livello di sicurezza delle applicazioni web.
 \end{itemize}
-OWASP Top Ten è un progetto, rilasciato da OWASP con cadenza triennale, che raccoglie le tipologie di vulnerabilità più rischiose nelle applicazioni web. E' una classificazione accettata a livello globale, che fornisce anche le contromisure per mitigare il rischio. Di seguito si riportano le vulnerabilità citate dalla OWASP Top Ten 2010 per introdurre le vulnerabilità nella applicazioni web.
+OWASP Top Ten è un progetto, rilasciato da OWASP con cadenza triennale, che raccoglie 10 tipologie di vulnerabilità tipiche delle applicazioni web. E' una classificazione accettata a livello globale basata sul rischio, che fornisce anche le contromisure per mitigare l'eventuale problematica. Di seguito si riportano le prime cinque vulnerabilità citate dalla OWASP Top Ten 2010, utili in seguito nella trattazione.
 
 \subsection{Injection}
 Questa categoria di vulnerabilità raccoglie tutte le casistiche in cui dati non fidati vengono inviati ad un interprete come parte di un comando o di una query. Tali dati possono essere eseguiti dall'interprete e possono condurre all'esecuzione di comandi non voluti oppure all'accesso a dati non autorizzati. Fanno parte di questa categoria SQL injection, LDAP injection e OS injection.\\
@@ -88,9 +88,39 @@ Questa tipologia di vulnerabilità ha radici architetturali oltre che implementa
 
 \subsection{Insecure direct object references}
 Una direct object reference si verifica quando uno sviluppatore espone un collegamento ad un oggetto interno, come un file, una directory, ad una chiave per accedere al database, ecc. Senza le opportune protezioni gli attaccanti possono manipolare tali collegamenti per accedere a dati in modo non autorizzato.\\
+Un esempio di tale vulnerabilità può verificarsi nelle applicazioni di home banking, dove il numero di conto corrisponde alla chiave primaria nel database. Anche se gli sviluppatori hanno utilizzato query SQL che evitano injections, se non esistono controlli aggiuntivi per verificare che l'utente sia il proprietario dell'account e sia autorizzato a visualizzare determinati contenuti, un attaccante potrebbe sfruttare il numero di conto per visualizzare dati provenienti da conti altrui.\\
+Le contromisure consistono nella verifica continua che l'accesso ai dati esposti avvenga effettivamente dagli utenti autorizzati e nell'uso di referenze ad oggetti interni indirette, quali ad esempio indici non collegati a dati sensibili. 
 
+\subsection{Cross site request forgery}
+Un attacco di tipo cross site request forgery (CSRF) forza una vittima loggata nell'applicazione web ad eseguire richieste HTTP costruite dall'attaccante per uno scopo ben preciso (tramite tags di tipo immagine, XSS o altre tecniche), generalmente ad insaputa della vittima. L'applicazione a questo punto reagisce interpretando la richiesta come legittima, e la richiesta può accedere ad ogni dato a cui la vittima può accedere.\\
+Si riporta un esempio di tale problematica:
 
-\section{Una proposta di development cycle che include la security}
+\begin{lstlisting}[language=PHP]
+http://example.com/app/transferFunds?amount=1500&destinationAccount=4673243243
+\end{lstlisting}
+
+L'applicazione di home banking esegue un trasferimento fondi da un account ad un altro mediante l'uso dei parametri riportati. In questo caso non vi è nulla di segreto nella richiesta. Se l'attaccante fosse in grado di lanciare sul computer della vittima loggata al sito una richiesta di questo tipo, con il proprio numero di conto nel campo destinationAccount, potrebbe trasferire la cifra riportata a se stesso. Per fare ciò, potrebbe forgiare un tag di tipo img apposito e fare in modo che la vittima lo visualizzi da loggata.\\
+L'esempio sottostante mostra un tag img adatto allo scopo:
+
+\begin{lstlisting}[language=PHP]
+<img src="http://example.com/app/transferFunds?amount=1500&destinationAccount=attackersAcct#" width="0" height="0" />
+\end{lstlisting}
+
+Prevenire CSRF comporta la creazione di un token non prevedibile nel corpo o nell'URL di ogni richiesta HTTP. Tale token dovrebbe essere univoco per sessione utente, ma è ancora meglio se è univoco per ogni richiesta. Con la presenza di tale valore non è più possibile per l'attaccante la creazione di una richiesta valida da fare eseguire di nascosto alla vittima.
+
+\subsection{Altre vulnerabilità}
+Le altre vulnerabilità citate in OWASP Top Ten ma non riportate nella sezioni precedenti sono le seguenti:
+
+\begin{itemize}
+\item Security misconfiguration: 
+\item Insecure cryptographic storage: 
+\item Failure to restrict URL access: 
+\item Insufficient transport layer protection: 
+\item Unvalidated redirects and forwards: 
+\end{itemize} 
+
+\section{Security development cycle}
+
 
 \chapter{Analisi Statica}
 
