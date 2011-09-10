@@ -28,7 +28,12 @@ Nei primi anni 2000 una seconda generazione di tools emerse, che si è evoluta f
 
 \section{Applicazioni}
 Sebbene le tecniche di analisi statica nacquero allo scopo di individuare difetti e di aderire a standard nella stesura del codice, molteplici successivi utilizzi vennero identificati ed implementati. \\
-Attualmente l'analisi statica è utilizzata negli IDE\footnote{Integrated Development Environment} per evidenziare e per mostrare eventuali errori alla sintassi, per riportare segnalazioni in caso di non adesione agli standard di scrittura del codice in molteplici linguaggi.\\
+Attualmente l'analisi statica è utilizzata negli IDE\footnote{Integrated Development Environment} per evidenziare la sintassi e le parole chiave, restituendo al programmatore una migliore visualizzazione del sorgente del programma ed aiutandolo a rintracciare facilmente errori di battitura.\\
+Sempre negli IDE viene utilizzata per segnalare eventuali errori nell'adesione alle regole definite da standard di scrittura del codice, come le spaziature, i rientri, la lunghezza delle righe ed il posizionamento delle parentesi. Sebbene questi standard possano risultare ai più superflui, quando il progetto in sviluppo viene realizzato da un numero elevato di sviluppatori è importante uniformare il codice al fine di ottenere una codebase leggibile.\\
+
+CONTINUARE CON LE APPLICAZIONI DELL'ANALISI STATICA
+
+  per riportare segnalazioni in caso di non adesione agli standard di scrittura del codice in molteplici linguaggi.\\
 In caso di software che possiede requisiti di sicurezza, ed ultimamente sempre più spesso visto il diffondersi di applicazioni critiche sotto questo punto di vista, l'analisi statica consente di individuare codice potenzialmente vulnerabile.
 
 \section{Analisi statica vs. analisi dinamica vs. code review}
@@ -48,7 +53,9 @@ La problematica di questa tipologia di analisi consiste nel tempo che richiede; 
 L'analisi dinamica è una tecnica che consiste nell'osservare il comportamento del software durante la sua esecuzione. Al fine di rendere tale tecnica effettiva è necessario che il programma venga eseguito con diversi input. L'analisi dinamica è una tecnica precisa, che non comporta approssimazione poichè osserva l'esatto comportamento runtime dell'applicazione.
 Lo svantaggio dell'analisi dinamica è la sua specificità: i risultati proposti riguardano solo ed esclusivamente quell'esecuzione, non c'è garanzia che la test suite utilizzata esegua effettivamente tutti i possibili data flow all'interno del software e che quindi esegua ogni porzione di codice. L'approccio definito dall'analisi dinamica è particolarmente adatto per il testing ed il debugging.
 
-Analisi statica ed analisi dinamica sono due approcci complementari che possono essere applicati allo stesso problema, i risultati hanno però diverse proprietà e l'esecuzione di ognuno ha diversi costi. Per tale ragione esistono soluzioni in grado di combinare analisi statica ed analisi dinamica al fine di ridurre i difetti tipici delle due tecniche e fornire risultati più attendibili.
+Analisi statica ed analisi dinamica sono due approcci complementari che possono essere applicati allo stesso problema, i risultati hanno però diverse proprietà e l'esecuzione di ognuno ha diversi costi. Per tale ragione esistono soluzioni in grado di combinare analisi statica ed analisi dinamica al fine di ridurre i difetti tipici delle due tecniche e fornire risultati più attendibili.\\
+Solitamente la combinazione di queste due tipologie consiste in tool di analisi dinamica che ispezionano dato in ingresso ed in uscita, usando la conoscenza ottenuta dall'analisi statica per aumentare l'accuratezza.\\
+Un esempio di questa tipologie di tool è Saner, sviluppato da Balzarotti et. al. \ref{}, il quale utilizza un tool di analisi statica per effettuare il riconoscimento di routine custom  di sanitizzazione del codice, ed un'analisi dinamica successiva per valutarne l'efficacia. 
 
 \chapter{Applicazione dell'analisi statica alla sicurezza di applicazioni web}
 Cosa posso risolvere usando analisi statica delle vulnerabilità precedenti?
