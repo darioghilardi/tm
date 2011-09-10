@@ -112,87 +112,27 @@ Prevenire CSRF comporta la creazione di un token non prevedibile nel corpo o nel
 Le altre vulnerabilità citate in OWASP Top Ten ma non riportate nella sezioni precedenti sono le seguenti:
 
 \begin{itemize}
-\item Security misconfiguration: 
-\item Insecure cryptographic storage: 
-\item Failure to restrict URL access: 
-\item Insufficient transport layer protection: 
-\item Unvalidated redirects and forwards: 
+\item Security misconfiguration: Le applicazioni web si basano su uno stack, ovvero un insieme di programmi che lavorano a diversi livelli. Molti di essi devono essere configurati correttamente, poiché non tutti vengono forniti di default con un setup sicuro, devono essere inoltre mantenuti ed aggiornati. Questa tipologia di vulnerabilità include tutti i casi in cui tale software non viene configurato o mantenuto correttamente.
+\item Insecure cryptographic storage: Molte applicazioni web non proteggono attraverso l'uso di cifratura i dati sensibili, come numeri di carte di credito o credenziali di autenticazione. Gli attaccanti possono quindi rubare o modificare tali dati per eseguire furti di identità, frodi ed altri crimini.
+\item Failure to restrict URL access: E' comune per un'applicazione web controllare i permessi di accesso all'URL prima di visualizzare contenuti protetti. Tuttavia le applicazioni necessitano che questi controlli vengano eseguiti ogni volta che queste pagine vengono accedute o gli attaccanti saranno in grado di costruire URL appositi per accedere a tali risorse senza i permessi.
+\item Insufficient transport layer protection: Le applicazioni spesso falliscono nel proteggere la confidenzialità e l'integrità del traffico di rete. Questo poiché talvolta utilizzano algoritmi non corretti, certificati non validi o scaduti, non implementano SSL oppure falliscono l'implementazione delle best practice per questa problematica.
+\item Unvalidated redirects and forwards: Può capitare che un'applicazione redirezioni l'utente verso altre pagine o siti web, usando dati non sicuri per determinare le pagine di destinazione. Senza l'appropriata validazione un attaccante può redirezionare la vittima verso phishing o siti contenenti malware.
 \end{itemize} 
 
-\section{Security development cycle}
-
-
-\chapter{Analisi Statica}
-
-\begin{epigraphs}
-\qitem{"As soon as we started  
-programming, we found to  
-our surprise that it wasn’t as  
-easy to get programs right as  
-we had thought.  Debugging  
-had to be discovered. I can 
-remember the exact instant  
-when I realized that a large  
-part of my life from then on  
-was going to be spent in finding 
-mistakes in my own programs."}{---\textsc{ Maurice Wilkes, Inventore di EDSAC, 1949}}
-\end{epigraphs}
-
-Tutti i progetti software condividono una caratteristica fondamentale: possiedono un codice sorgente che ne definisce il funzionamento. Tale codice sorgente è costituito da una serie di istruzioni scritte in un linguaggio di programmazione che vengono interpretate da un compilatore e successivamente eseguite. Il codice sorgente di un software risiede tipicamente su uno o più files di testo.\\
-Il codice sorgente non è esente da errori bensì ha l'intrinseca proprietà di possedere difetti. Sin dagli albori della programmazione software gli sviluppatori hanno avuto a che fare con tali difetti, individuando un rapporto di proporzionalità diretta tra il numero di questi ultimi ed il numero di righe di codice scritte per un determinato software. L'aumentare della complessità dei programmi e la necessità di affidabilità hanno reso il controllo dei difetti fondamentale nell'industria del software, tanto che è opportuno che prima di un rilascio determinati standard di qualità siano rispettati. \\
-Al fine di ridurre il quantitativo di difetti nel software e di aderire agli standard i programmatori hanno pensato di sviluppare altro software in grado di analizzare il codice sorgente di un programma durante la fase di sviluppo.\\
-Tale analisi è detta \emph{analisi statica} ed è una tecnica che consiste nell'ispezionare automaticamente il codice sorgente di un software senza però eseguirlo. Il grosso vantaggio di tale tecnica consiste nella sua applicazione alla radice del processo di sviluppo, in contrasto alle esistenti tecniche di testing che vedevano posticipata la correzione dei difetti alla fase di pre-rilascio. Anticipare l'identificazione del difetto software comporta minori costi di correzione; è proprio questo il motivo del successo dell'analisi statica.
-
-\section{Storia}
-La nascita delle tecniche di analisi statica viene solitamente attribuita al tool Lint, sviluppato da Stephen C. Johnson e rilasciato alla fine degli anni '70. Lint fu realizzato allo scopo di segnalare come sospetti alcuni costrutti nel sorgente in linguaggio C, come la mancanza di punti e virgola, parentesi, cast impliciti, ecc. 
-Lint era integrato con il processo di compilazione, soluzione che sembrava essere la migliore per riportare segnalazioni relative al codice e che ne contribuì alla diffusione.\\
-Purtroppo le limitate capacità di analisi, quali ad esempio l'obbligo di eseguire la scansione un file per volta, fecero si che Lint riportasse un elevata percentuale di rumore tra i risultati, ovvero valori corretti dal punto di vista dell'analisi ma irrilevanti per lo sviluppatore al fine di correggere difetti. Ciò si tradusse nella necessità di eseguire dei controlli manuali sui risultati di Lint, esattamente la situazione che Lint si era proposto di eliminare.
-Per tale motivo Lint non fu mai adottato globalmente come tool per l'individuazione di difetti.\\
-Nei primi anni 2000 una seconda generazione di tools emerse, che si è evoluta fino ad oggi. Gli sviluppatori intuirono che era necessario comprendere attraverso il software di analisi maggiori dettagli relativi al funzionamento del programma. Produssero tools in grado di  analizzare più files contemporaneamente e di identificare i percorsi di flusso dei dati, ma si scontrarono con la problematica che da sempre caratterizza l'analisi statica: il necessario compromesso da attuare tra performance ed accuratezza. L'efficacia delle tecniche di analisi statica è altamente condizionata dal fatto che devono essere gli sviluppatori ad utilizzarle, poichè prima si è in grado di identificare il difetto e minore costo ha la sua correzione.
-
-\section{Applicazioni}
-Sebbene le tecniche di analisi statica nacquero allo scopo di individuare difetti e di aderire a standard nella stesura del codice, molteplici successivi utilizzi vennero identificati ed implementati. \\
-Attualmente l'analisi statica è utilizzata negli IDE\footnote{Integrated Development Environment} per evidenziare e per mostrare eventuali errori alla sintassi, per riportare segnalazioni in caso di non adesione agli standard di scrittura del codice in molteplici linguaggi.\\
-In caso di software che possiede requisiti di sicurezza, ed ultimamente sempre più spesso visto il diffondersi di applicazioni critiche sotto questo punto di vista, l'analisi statica consente di individuare codice potenzialmente vulnerabile.
-
-\section{Analisi statica vs. analisi dinamica vs. code review}
-Le tecniche di analisi statica analizzano il sorgente di un programma in modo automatico senza eseguirlo. Prima della nascita di tali tecniche gli sviluppatori effettuavano un controllo manuale sul codice chiamato \emph{code review}.\\
-
-La code review può essere eseguita da più sviluppatori (\emph{peer review}) oppure da un solo sviluppatore. E' una procedura complessa, che ha come requisito fondamentale la piena conoscenza delle decisioni architetturali prese durante la progettazione e la scrittura del codice oltre ad un'ottima padronanza del linguaggio in analisi. \\
-Esistono due categorie di code review: \emph{formal code review} e \emph{lightweight code review}. La prima categoria richiede un dettagliato processo di analisi suddiviso in molteplici fasi. Tale metodologia comporta l'analisi di copie stampate del materiale ed è svolta da più partecipanti che contemporaneamente analizzano il codice.\\
-La seconda categoria richiede meno formalismi rispetto alla precedente e viene svolta solitamente durante il normale processo di sviluppo. All'interno di essa si possono individuare le seguenti pratiche:
+\section{Security development life cycle}
+Tutte le realtà che si occupano di sviluppo software implementano un modello che definisce le fasi entro cui lo sviluppo prende parte. Tali fasi sono definite nel software development life cycle (SDLC).\\
+Esistono diversi modelli che implementano il software development life cycle:
 \begin{itemize}
-\item Over-the-shoulder: uno sviluppatore osserva il codice che l'altro sta scrivendo per segnalare eventuali problemi
-\item Email pass around: un SCM\footnote{Source Code Management System} invia tramite email il nuovo codice inserito nella codebase ad un soggetto che si occupa di effettuare la review.
-\item Pair programming: Due sviluppatori scrivono codice contemporaneamente sulla stessa workstation. 
-\item Tool-assisted code review: Sviluppatori e reviewers usano tools in grado di effettuare code review collaborativa.
+\item A cascata
+\item A spirale
+\item Iterativo ed incrementale
+\item Agile
+\item Code and fix
 \end{itemize}
-La problematica di questa tipologia di analisi consiste nel tempo che richiede; i dati raccolti dai maggiori operatori del settore stimano che in media si possa effettuare code review su 150 linee di codice per ogni ora, fino a rimuovere l'85\% dei difetti presenti nel software.
+Tutti questi modelli però non contemplano la fase di analisi della sicurezza dell'applicazione, bensì relegano tale fase al termine del processo di sviluppo. Ciò è inefficiente poiché influisce sui costi (una modifica a prodotto completato è sicuramente più costosa di una modifica eseguita durante lo sviluppo) e comporta una perdita di controllo (modificare il prodotto in uno stage così avanzato del processo comporta dover eseguire nuovamente i test). Per tali motivi è opportuno che l'analisi di sicurezza venga implementata nello sviluppo, introducendo un diverso software development life cycle.
 
-L'analisi dinamica è una tecnica che consiste nell'osservare il comportamento del software durante la sua esecuzione. Al fine di rendere tale tecnica effettiva è necessario che il programma venga eseguito con diversi input. L'analisi dinamica è una tecnica precisa, che non comporta approssimazione poichè osserva l'esatto comportamento runtime dell'applicazione.
-Lo svantaggio dell'analisi dinamica è la sua specificità: i risultati proposti riguardano solo ed esclusivamente quell'esecuzione, non c'è garanzia che la test suite utilizzata esegua effettivamente tutti i possibili data flow all'interno del software e che quindi esegua ogni porzione di codice. L'approccio definito dall'analisi dinamica è particolarmente adatto per il testing ed il debugging.
+INSERIRE QUI IMMAGINE SDLC
 
-Analisi statica ed analisi dinamica sono due approcci complementari che possono essere applicati allo stesso problema, i risultati hanno però diverse proprietà e l'esecuzione di ognuno ha diversi costi. Per tale ragione esistono soluzioni in grado di combinare analisi statica ed analisi dinamica al fine di ridurre i difetti tipici delle due tecniche e fornire risultati più attendibili.
-
-\chapter{Applicazione dell'analisi statica alla sicurezza di applicazioni web}
-Cosa posso risolvere usando analisi statica delle vulnerabilità precedenti?
-
-\chapter{Analisi statica di codice PHP}
-
-\chapter{Comparazione dei principali tool esistenti}
-
-\section{Pixy}
-
-\section{Saner}
-
-\section{RIPS}
-
-\chapter{Vulture}
-
-\section{Problematiche}
-
-\section{Sviluppi futuri}
-
-\chapter{Discussione}
-
-\chapter{Conclusioni}
+L'immagine \ref{} mostra come la sicurezza non sia una fase all'interno del processo di sviluppo, bensì un processo, da attuare costantemente.\\
+E' fondamentale identificare il prima possibile un problema di sicurezza, poiché ciò comporta costi minori di fixing e riduce la finestra di esposizione, presente nel modello patch-and-penetrate  \ref{}, dominante fino a pochi anni fa. 
+Introdurre l'analisi di sicurezza nel SDLC non è però semplice, occorre una maggiore conoscenza delle problematiche e qualche sistema in grado di automatizzare la ricerca di errori comuni, che abbia come requisito una rapidità di scansione e feedbacks immediati. Per questo compito l'analisi statica è altamente efficiente.
