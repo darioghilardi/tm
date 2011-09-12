@@ -30,11 +30,12 @@ Nei primi anni 2000 una seconda generazione di tools emerse, che si è evoluta f
 Sebbene le tecniche di analisi statica nacquero allo scopo di individuare difetti e di aderire a standard nella stesura del codice, molteplici successivi utilizzi vennero identificati ed implementati. \\
 Attualmente l'analisi statica è utilizzata negli IDE\footnote{Integrated Development Environment} per evidenziare la sintassi e le parole chiave, restituendo al programmatore una migliore visualizzazione del sorgente del programma ed aiutandolo a rintracciare facilmente errori di battitura.\\
 Sempre negli IDE viene utilizzata per segnalare eventuali errori nell'adesione alle regole definite da standard di scrittura del codice, come le spaziature, i rientri, la lunghezza delle righe ed il posizionamento delle parentesi. Sebbene questi standard possano risultare ai più superflui, quando il progetto in sviluppo viene realizzato da un numero elevato di sviluppatori è importante uniformare il codice al fine di ottenere una codebase leggibile.\\
-
-CONTINUARE CON LE APPLICAZIONI DELL'ANALISI STATICA
-
-  per riportare segnalazioni in caso di non adesione agli standard di scrittura del codice in molteplici linguaggi.\\
+I software di ottimizzazione del codice sfruttano l'analisi statica per determinare porzioni di codice che possono essere eseguite più velocemente se riorganizzate; tale analisi viene svolta valutando come le istruzioni riempirebbero la pipeline della CPU e riordinandole di conseguenza.\\
+L'analisi statica è utilizzata anche a fini di generazione della documentazione; tali librerie leggono il contenuto delle annotations e dei commenti all'interno del codice sorgente per generare documenti che descrivono la struttura del programma. Tra questi si ricorda Doxygen\footnote{http://www.doxygen.org}, una delle librerie più utilizzate a questo scopo.\\
+L'analisi statica è infine anche usata dai programmatori per capire il funzionamento, per calcolare le metriche e per rifattorizzare il codice sorgente.\\
 In caso di software che possiede requisiti di sicurezza, ed ultimamente sempre più spesso visto il diffondersi di applicazioni critiche sotto questo punto di vista, l'analisi statica consente di individuare codice potenzialmente vulnerabile.
+
+A seconda dell'utilizzo e dell'implementazione un'analisi statica varia totalmente per velocità di esecuzione, dalla rapidità di un'esecuzione real-time alla lentezza di un'esecuzione alla ricerca di problematiche di sicurezza. La complessità del task risulta essere solitamente direttamente proporzionale al tempo necessario per l'esecuzione e ciò influenza gli utilizzi di tale tipologia di analisi. Tuttavia il principale scopo dell'analisi statica è quello di aiutare lo sviluppatore nel comprendere il codice e nel trovare e risolvere problemi, siano essi di sicurezza o meno.
 
 \section{Analisi statica vs. analisi dinamica vs. code review}
 Le tecniche di analisi statica analizzano il sorgente di un programma in modo automatico senza eseguirlo. Prima della nascita di tali tecniche gli sviluppatori effettuavano un controllo manuale sul codice chiamato \emph{code review}.\\
