@@ -20,7 +20,10 @@ Al fine di ridurre il quantitativo di difetti nel software e di aderire agli sta
 Tale analisi è detta \emph{analisi statica} ed è una tecnica che consiste nell'ispezionare automaticamente il codice sorgente di un software senza però eseguirlo. Il grosso vantaggio di tale tecnica consiste nella sua applicazione alla radice del processo di sviluppo, in contrasto alle esistenti tecniche di testing che vedevano posticipata la correzione dei difetti alla fase di pre-rilascio. Anticipare l'identificazione del difetto software comporta minori costi di correzione; è proprio questo il motivo del successo dell'analisi statica.
 
 \section{Storia}
-La nascita delle tecniche di analisi statica viene solitamente attribuita al tool Lint, sviluppato da Stephen C. Johnson e rilasciato alla fine degli anni '70. Lint fu realizzato allo scopo di segnalare come sospetti alcuni costrutti nel sorgente in linguaggio C, come la mancanza di punti e virgola, parentesi, cast impliciti, ecc. 
+Il primo approccio all'analisi statica è storicamente da attribuire al tool di Unix \emph{grep} (General Regular Expression Print), che ricerca in uno o più file di testo le linee che corrispondono ad uno o più modelli specificati con espressioni regolari o stringhe letterali e produce un elenco di linee in cui è stata trovata una corrispondenza.
+Grep non conosce nessun dettaglio dei files che sta esaminando, li interpreta semplicemente come files di testo, di conseguenza sebbene possa produrre risultati apprezzabili con determinati pattern di ricerca non si può considerare come un vero e proprio tool di analisi statica. \\
+Per aumentare la fedeltà nei risultati è importante che vengano prese in considerazione le regole lessicali specifiche del linguaggio, al fine di poter distinguere tra i vari costrutti.\\  
+La vera nascita delle tecniche di analisi statica viene solitamente attribuita al tool Lint, sviluppato da Stephen C. Johnson e rilasciato alla fine degli anni '70. Lint fu realizzato allo scopo di segnalare come sospetti alcuni costrutti nel sorgente in linguaggio C, come la mancanza di punti e virgola, parentesi, cast impliciti, ecc. 
 Lint era integrato con il processo di compilazione, soluzione che sembrava essere la migliore per riportare segnalazioni relative al codice e che ne contribuì alla diffusione.\\
 Purtroppo le limitate capacità di analisi, quali ad esempio l'obbligo di eseguire la scansione un file per volta, fecero si che Lint riportasse un elevata percentuale di rumore tra i risultati, ovvero valori corretti dal punto di vista dell'analisi ma irrilevanti per lo sviluppatore al fine di correggere difetti. Ciò si tradusse nella necessità di eseguire dei controlli manuali sui risultati di Lint, esattamente la situazione che Lint si era proposto di eliminare.
 Per tale motivo Lint non fu mai adottato globalmente come tool per l'individuazione di difetti.\\
@@ -59,7 +62,52 @@ Solitamente la combinazione di queste due tipologie consiste in tool di analisi 
 Un esempio di questa tipologie di tool è Saner, sviluppato da Balzarotti et. al. \ref{}, il quale utilizza un tool di analisi statica per effettuare il riconoscimento di routine custom  di sanitizzazione del codice, ed un'analisi dinamica successiva per valutarne l'efficacia. 
 
 \chapter{Applicazione dell'analisi statica alla sicurezza di applicazioni web}
-Cosa posso risolvere usando analisi statica delle vulnerabilità precedenti?
+Analizzando i reports di più attacchi eseguiti con successo alla sicurezza di applicazioni web si è notato che molti di questi non sono rivolti alla scoperta di nuove tipologie di vulnerabilità, bensì alla ricerca di vulnerabilità note.\\ Sebbene sia facile imputare la continua presenza di tali vulnerabilità alla negligenza dello sviluppatore, il vero problema è dato dal fatto che le tecniche per evitare queste problematiche non sono codificate nel processo di sviluppo software e non è pensabile fare affidamento sulla memoria dello sviluppatore per evitarle. E' questo il motivo per cui occorrono dei sistemi in grado di rilevare tali vulnerabilità direttamente nel processo di sviluppo, ed è in questo caso che l'analisi statica entra in gioco.
+
+I primi approcci all'analisi statica orientata alla sicurezza si possono trovare nei tools RATS, ITS4 e Flawfinder, capaci di effettuare il parsing del codice sorgente al fine di trovare chiamate a funzioni pericolose. Dopo aver trasformato in tokens il codice sorgente (il primo step che anche il compilatore esegue), questi tools effettuavano una comparazione tra lo stream di tokens generato ed una libreria di costrutti vulnerabili. Sebbene questi approcci basati sull'analisi lessicale furono un passo avanti rispetto a grep, producevano un elevato numero di falsi positivi. Uno stream di tokens è certamente meglio di uno stream di caratteri, ma nemmeno questi tools avevano una minima conoscenza del funzionamento del programma. \\
+Con il passare degli anni i tool per l'analisi statica orientata alla sicurezza sono cresciuti in complessità e sono diventati più sofisticati. La vera evoluzione si è avuta con la presa in considerazione del contesto delle chiamate e delle informazioni semantiche di un programma. Questo ha reso possibile l'individuazione delle condizioni entro cui una vulnerabilità si può manifestare, aumentando l'accuratezza e l'efficienza.\\
+Costruendo un AST (abstract syntax tree) dal codice sorgente questi tool possono effettivamente considerare la semantica del programma in esame. Dall'AST è possibile eseguire diverse tipologie di analisi:
+\begin{itemize}
+\item Local analysis: esamina il programma una funzione per volta e non considera le relazioni tra le funzioni.
+\item Module-level analysis: considera un modulo/classe per volta ma non considera le chiamate tra i moduli.
+\item Global-level analysis: considera il programma per intero prendendo in considerazione tutte le chiamate tra funzioni.
+\end{itemize}
+A seconda della tipologia di analisi dipende la quantità di contesto che il tool deve considerare, più contesto significa meno falsi positivi ma anche più computazione.\\
+Un buon tool per l'analisi statica orientata alla sicurezza deve essere facile da usare ed i risultati devono essere comprensibili agli sviluppatori che non conoscono approfonditamente le problematiche di sicurezza. Al fine che un tool di analisi statica venga utilizzato come parte attiva nello sviluppo è importante che il tempo di computazione non sia troppo elevato viceversa rischia di essere utilizzato saltuariamente, aumentando il costo per la risoluzione di eventuali problematiche.
+
+\section{Tecniche di analisi}
+In letteratura sono presenti diversi approcci per l'esecuzione di analisi statica finalizzata alla scoperta di vulnerabilità di sicurezza. Tutti sono però contraddistinti dalla seguenti tre fasi:
+\begin{itemize}
+\item Costruzione del modello
+\item Analisi
+\item Report dei risultati
+\end{itemize}
+
+La fase di costruzione del modello riguarda l'astrazione che è necessario effettuare sul codice sorgente. Come esposto in precedenza esistono tool che lavorano direttamente sul codice, il più primitivo dei quali è grep, tuttavia lavorare direttamente su di esso è problematico poiché è necessario costruire espressioni regolari complesse e non si ha una visione d'insieme dell'intero programma e delle procedure.\\
+Nell'analisi statica solitamente si preprocessa il codice per ottenere una rappresentazione ad un livello più basso, sfruttando le normali operazioni eseguite dal compilatore:
+\begin{enumerate}
+\item Line reconstruction: nei linguaggi che consentono spaziature arbitrarie tra gli identificativi è necessaria la presenza di una fase che ricostruisca le linee restituendo una forma canonica. In alcuni vecchi linguaggi questa fase eseguiva anche una normalizzazione nel caso venisse usato lo stropping\footnote{Tecnica che consiste nell'utilizzare una stringa sia come parola chiave che come identificatore.}.
+\item Analisi lessicale: il codice viene pulito da elementi inutili come spaziature e commenti e trasformato in uno stream di tokens. Ogni token è una singola unità atomica del linguaggio, ad esempio una parola chiave, un identificativo oppure il nome di un simbolo. Tool come RATS, ITS4 e Flawfinder si limitavano ad utilizzare il risultato di questa fase come input per la propria analisi.
+\item Analisi sintattica: lo stream di tokens viene trasformato in un \emph{parse tree}, ovvero una rappresentazione ad albero del codice sorgente. Viene così determinata la struttura grammaticale dello stream di tokens in input grazie all'uso di una data grammatica formale. L'elemento che esegue questa operazione è detto \emph{parser}.
+\item AST: il parse tree creato nella fase precedente viene trasformato in un \emph{abstract syntax tree}. Un AST è un albero simile al parse tree ma pulito di tutti i tokens non utili per l'analisi semantica.
+\item Analisi semantica: Ad ogni token viene attribuito un significato al fine di creare una tabella dei simboli. Questa fase esegue il controllo dei tipi di dato (type checking), l'associazione tra le referenze delle funzioni e le loro definizioni (object binding), il controllo che tutte le variabili siano inizializzate prima dell'uso (definite assignment).
+\item Analisi del flusso di controllo: Tutti i possibili percorsi che possono essere eseguiti all'interno del codice vengono tradotti in una serie di \emph{Control flow graphs}. Il flusso di controllo tra le funzioni è raccolto nei \emph{call graphs}.
+\item Analisi del flusso dei dati: L'analisi controlla come i dati si muovono all'interno del programma. Vengono a tale scopo usati i grafici realizzati nella fase precedente. Il compilatore usa tale analisi per allocare i registri, rimuovere codice non utilizzato ed ottimizzare l'uso di processore e memoria.
+\end{enumerate}
+
+Nonostante il compilatore esegua tutte queste fasi per l'interpretazione del codice sorgente, i tool di analisi statica generalmente si limitano ad alcune di queste operazioni prima di raggiungere una rappresentazione da analizzare.
+In base al dato che si analizza esistono innumerevoli approcci alla fase di analisi, ognuno con le proprie caratteristiche e di conseguenza con risultati differenti.\\
+
+---RIVEDERE---
+
+Brian Chess at.al.\cite{CITAZIONE 1 NEL PAPER DE POEL} hanno proposto un approccio composto da due fasi, \emph{intraprocedural analysis} o \emph{local analysis} ed \emph{interprocedural analysis} o \emph{global analysis}. La prima si occupa di analizzare una funzione individualmente, la seconda di analizzare le interazioni tra le funzioni.\\
+Analizzare una funzione individualmente significa tenere traccia delle proprietà dei dati nella funzione e delle condizioni per le quali una funzione può essere chiamata in modo sicuro. Tracciare tali proprietà diventa però problematico in caso di loop e branches, la quantità di dati diventa ingente per cui l'approccio risulta difficilmente praticabile. Riducendo la precisione tuttavia si possono ottenere comunque risultati apprezzabili con quantità di dati inferiori, astraendo le proprietà del programma che non sono di interesse (abstract interpretation) come può essere l'ordine in cui le istruzioni vengono eseguite (flow-insensitive analysis).
+
+A seconda dello stato globale del programma una funzione può riportare risultati differenti. La global analysis consiste nel comprendere il contesto entro il quale una funzione viene eseguita, per valutare le implicazioni conseguenti. A tale scopo è possibile eseguire una \emph{whole-program analysis} che consiste nel combinare in un'unica funzione tutto il codice che viene eseguito sostituendo le chiamate a funzioni con i relativi metodi. Tale tecnica non viene spesso utilizzata poichè porta alla generazione di un unico blocco di codice sorgente molto lungo che richiede molta memoria e molto tempo per essere analizzato.\\
+Una tecnica alternativa è chiamata \emph{function summaries} e consiste nel trasformare una funzione in un insieme di precondizioni e postcondizioni, usando la conoscenza ottenuta tramite la local analysis. Quando viene eseguita l'analisi si tengono in considerazione solo tali elementi per determinare gli effetti che hanno sull'intero programma. 
+
+
+---RIVEDERE---
 
 \chapter{Analisi statica di codice PHP}
 
