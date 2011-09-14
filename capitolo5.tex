@@ -10,10 +10,20 @@ Nonostante questi miglioramenti il linguaggio vive di un contrasto perenne tra l
 Php è un linguaggio di scripting, ovvero un linguaggio di programmazione interpretato. A differenza dei linguaggi di programmazione compilati, che compilano il proprio codice in linguaggio macchina prima dell'esecuzione, PHP viene eseguito per mezzo di un interprete.\\
 In ambito web viene utilizzato attraverso l'uso di un'estensione applicata al web server, per consentire la generazione dinamica di codice HTML. Per Apache, il web server più diffuso, l'estensione è chiamata mod\_php.\\
 PHP possiede un gran numero di librerie per eseguire ogni tipo di operazione, dall'elaborazione di immagini alla manipolazione di documenti XML fino alla crittografia.\\
-PHP non si basa su una specifica formale, l'unica documentazione della semantica è data dalla definizione del linguaggio nel codice sorgente della sua implementazione. Tale mancanza rende complessa per un tool di analisi la modellazione del comportamento del programma in esame.
-Biggar e Gregg\cite{CITAZIONE DI PHC PAPER} hanno realizzato phc, un compilatore alternativo che supporta codice PHP 4. Durante la fase di costruzione del modello hanno avuto a che fare con la non documentata semantica di PHP ed hanno riportato nello studio le caratteristiche che hanno ritenuto ambigue e problematiche per un tool di analisi della semantica del codice.\\
+PHP non si basa su una specifica formale, l'unica documentazione della semantica è data dalla definizione del linguaggio nel codice sorgente della sua implementazione. Tale mancanza rende complessa per un tool di analisi la modellazione del comportamento del programma in esame.\\
+Biggar e Gregg\cite{CITAZIONE DI PHC PAPER} sono gli autori di phc, un compilatore alternativo rispetto a Zend che supporta solo codice PHP 4. Durante lo studio della semantica di PHP hanno avuto a che fare con la mancanza di un modello formale ed hanno riportato nel proprio studio le caratteristiche che hanno ritenuto ambigue e problematiche. Siccome l'analisi della semantica del linguaggio è necessaria anche nei tool di analisi statica, di seguito vengono riportate alcune problematiche da loro evidenziate:
+\begin{itemize}
+\item Incongruenze tra PHP 4 e PHP 5: Le differenze implementative tra PHP 4 e PHP 5 rendono l'analisi statica del codice sorgente problematica. Un caso emblematico riguarda il passaggio di valori degli argomenti di un metodo che in PHP 4 avveniva di default per valore, in PHP 5 per riferimento. Benchè codice PHP 4 sia ormai datato questa differenza è ancora un vincolo importante per l'esecuzione di un'analisi statica efficiente.
+\item Il file di configurazione php.ini influisce sul programma in esame, ad esempio la direttiva \emph{include\_path} definisce i files che vengono automaticamente aggiunti alla codebase, mentre \emph{magic\_quotes\_gpc} cambia il modo secondo il quale le stringhe vengono gestite.
+\item Le nuove release di PHP possono alterare la semantica del linguaggio anche se contengono solo bugfix.
+\end{itemize}
 
-
+Oltre a queste problematiche la dinamicità del linguaggio comporta la presenza di alcune situazioni difficili da esaminare con la sola analisi statica. Tra queste:
+\begin{itemize}
+\item Valutazione del codice run-time: Il costrutto \emph{eval} consente di eseguire come istruzioni le sequenze di caratteri contenute in una stringa come se fossero codice sorgente. Il contenuto di tale stringa però non è conosciuto prima dell'esecuzione del programma, rendendo di fatto impossibile l'analisi di tale contenuto.
+\item Inclusione run-time di files esterni: In PHP è possibile definire l'inclusione di files a seconda dello stato di variabili valutate run-time. Il valore di tali variabili non è definibile tramite analisi statica.
+\item 
+\end{itemize}
 
 \chapter{Comparazione dei principali tool esistenti}
 
