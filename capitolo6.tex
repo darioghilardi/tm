@@ -1,27 +1,51 @@
-\chapter{Strategie economiche}
-\section{Il costo di usare soluzioni free}
-E' inevitabile in un documento riguardante la sicurezza nei sistemi operativi Linux la trattazione degli eventuali vantaggi economici che possono derivare dall'adozione di questo genere di soluzioni in confronto alle soluzioni commerciali.\\
-E' essenziale considerare il fatto che, nonostante sia possibile avere a disposizione gratuitamente lo strumento in grado di fornire una soluzione di sicurezza, esistono comunque costi impliciti dovuti all'implementazione dello strumento nel contesto, al training ed alle eventuali consulenze. \\
-Supponendo per esempio di adottare un firewall software gratuito installato su una macchina con sistema operativo Linux, non avremmo costi per quanto riguarda l'acquisizione di licenze, o l'acquisto del software. Confrontando questa soluzione con un firewall hardware in vendita a costi irrisori dovremmo considerare il fatto che la soluzione commerciale ha un costo iniziale, ma non appena si è affrontato quel costo la soluzione è pronta per essere messa in funzione, senza costi aggiuntivi. Viceversa la soluzione basata su software libero necessita di configurazione dello strumento software.\\
-Allo stesso modo un fattore da considerare con attenzione è il costo di manutenzione, una soluzione commerciale può avere costi di manutenzione molto variabili a seconda della soluzione scelta, la soluzione basata sul software libero invece può avere costi di manutenzione stimabili a priori poiché la manutenzione può essere fatta da chiunque.\\
-Un ultimo costo di cui tenere conto è sicuramente il costo di personalizzazione dello strumento. Con un prodotto commerciale può capitare di non avere margini di personalizzazione, o comunque in caso di personalizzazione si rischiano costi solitamente molto elevati. Con una soluzione libera invece si profilano due scenari: il codice sorgente è open source, e quindi è liberamente scaricabile e modificabile anche a basso costo (direttamente propozionale al livello di training effettuato precedentemente, oppure al costo della consulenza esterna necessaria), oppure il codice sorgente non è open source e quindi ci si ritrova con una situazione molto simile a quella del software commerciale. \\
-La personalizzazione è purtroppo qualcosa che non è possibile stimare a priori fino a quando non si è realizzata un'analisi dettagliata del package con cui si ha a che fare. \\
-Un buon workflow per la scelta della soluzione adeguata può essere il seguente:
-\begin{enumerate}
-\item Identificare le soluzioni disponibili
-\item Effettuare delle ricerche per capire come funziona ciascuna soluzione
-\item Effettuare una comparazione secondo i seguenti parametri
+\chapter{Comparazione dei principali tool esistenti}
+Nel seguente capitolo verranno esposte le modalità di funzionamento di alcuni tool che eseguono analisi statica di codice PHP al fine di trovare vulnerabilità. Verranno confrontati gli approcci e verrà valutata la possibile applicabilità durante il normale ciclo di sviluppo software. \\
+Alcuni di questi tool sono effettivamente disponibili, altri sono dei prototipi accademici, altri ancora non supportano le versioni più recenti di PHP. l'obiettivo di tale sezione è quello di illustrare come la ricerca di vulnerabilità tramite analisi statica di codice PHP non presenti soluzioni affermate e si cercherà di spiegarne le motivazioni.
+
+\section{Pixy}
+Pixy è un tool di analisi statica scritto in Java per la detection di vulnerabilità in codice PHP 4, rilasciato sotto licenza GPL. Sviluppato da Jovanovic\ref{CITAZIONE} come lavoro accademico, inizialmente consentiva la ricerca di sole vulnerabilità di tipo XSS ma successivamente è stato esteso alla ricerca di altre vulnerabilità di tipo taint-style, come SQL injections e command injections.\\
+Pixy è flow sensitive, ovvero prende in considerazione l'ordine delle istruzioni del programma e la scansione che effettua è di tipo globale (interprocedural analysis), ovvero non valuta una funzione singolarmente ma tiene in considerazione il contesto in cui viene eseguita. Inoltre Pixy è dotato di un meccanismo di analisi degli alias che consente di ridurre i numerosi falsi positivi che tale caratteristica del linguaggio potrebbe generare.\\
+Pixy è disponibile anche in una versione web-based limitata sul sito ufficiale\footnote{http://pixybox.seclab.tuwien.ac.at/pixy/webinterface.php}.
+
+La scansione di Pixy si basa sulla definizione di tre parametri:
 \begin{itemize}
-\item Funzionalità
-\item Costi
-\item Momentum
-\item Supporto
-\item Performance
-\item Security
-\item Usabilità
-\item Licenza ed aspetti legali
-\item Criteri specifici per l'ambiente di produzione
+\item Gli entry points del programma: GET, POST e COOKIE.
+\item Le funzioni di sanitizzazione: htmlentities, htmlspecialchars ed opportuno type casting.
+\item Sensitive sinks: funzioni che ritornano output al browser, come print, echo, printf.
 \end{itemize}
-\item Effettuare un testing dettagliato
-\item Conclusione e scelta
-\end{enumerate}
+Queste definizioni sono stabilite tramite un file di configurazione in formato testuale.\\
+L'obiettivo della scansione consiste nel determinare in quali circostanze è possibile che un dato tainted possa raggiungere un sensitive sink senza essere sanitizzato in modo opportuno. La tecnica per determinare ciò è quella della data-flow analysis, ovvero si computano in ogni punto del programma i possibili contenuti delle variabili per tracciare quali possono essere tainted. La data-flow analysis opera sul control flow graph del programma, quindi è necessario che prima dell'esecuzione venga costruito un albero (nello specifico un parse-tree) del file PHP in input. Tale operazione viene svolta con Jflex, un lexical analyzer scritto in java e Java Parser Cup, un generatore di parser in java.\\
+Prima di eseguire la taint analysis sul control flow graph risultante vengono eseguite diverse operazioni, tra cui l'alias analysis (fornisce informazioni sugli alias) e la literal analysis (valuta le condizioni di branch ed esclude i percorsi che non possono essere eseguiti a run-time). Entrambe queste operazioni servono ad aumentare la precisione del tool, sebbene aumentino la complessità.\\
+Pixy non considera le sanitizzazioni custom, generalmente effettuate con espressioni regolari, per due motivi: prima di tutto non è in grado di valutarle, inoltre si ritiene a priori che effettuare sanitizzazioni mediante l'uso di espressioni regolari sia una pessima decisione implementativa a causa della facilità di errore.
+
+La grossa problematica che affligge Pixy è data dal fatto che non è in grado di parsare codice scritto per PHP 5. Le ingenti modifiche apportate da tale release al linguaggio hanno reso Pixy inadeguato per gli attuali progetti scritti in PHP.\\
+Sebbene fosse molto promettente nel periodo in cui è stato sviluppato, il tool non riceve aggiornamenti dal 2007 e risulta effettivamente abbandonato. La mancanza di una solida community ha fatto si che nessuna terza parte abbia forkato il progetto per proseguirne lo sviluppo, rendendolo ormai troppo datato per l'utilizzo su codice sorgente attuale.
+
+Secondo i risultati dei test eseguiti dall'autore[12 su paper depoel] Pixy ha una percentuale di falsi positivi che si aggira intorno al 50\%, soglia considerata dall'autore stesso accettabile per un tool di analisi statica su un linguaggio fortemente dinamico come PHP. Secondo le analisi eseguite da de Poel[CITAZONE] nel 2010, durante la scansione del codice sorgente di alcuni progetti open source viene dimostrato che Pixy non è in grado di funzionare con codebase recenti, la scansione ha riportato risultati per solo cinque su sedici dei software analizzati e, neppure in questi casi, i risultati sono stati attendibili.
+
+\section{Saner}
+Saner è un prototipo, basato su Pixy, che combina le peculiarità di un'analisi statica con quelle di un'analisi dinamica.
+Sviluppato da Balzarotti et.al.\cite{CITAZIONE} dimostra come sia possibile combinare due approcci a prima vista molto differenti per migliorare i risultati ottenuti.\\
+La parte di analisi statica viene eseguita da Pixy, che si occupa di determinare in che modo l'applicazione processa l'input, individuando eventuali sanitizzazioni incomplete. Successivamente interviene una fase di analisi dinamica che si occupa di ricostruire il codice responsabile per la sanitizzazione dell'input. Una volta ricostruito, Saner processa tale codice con input malevoli per individuare eventuali problemi nelle sanitizzazioni.\\
+Facendo affidamento sull'analisi dinamica, Saner è in grado di valutare eventuali sanitizzazioni custom al posto di reputarle direttamente come inaffidabili, cosa che il solo Pixy era costretto a fare.\\
+Nell'esempio seguente viene evidenziato il valore del contributo dell'analisi dinamica nella scelta della giusta decisione da intraprendere.
+
+[ESEMPIO DA PAPER SANER]
+
+La maggior parte dei tool di analisi statica avrebbero marchiato la prima parte del codice riportato come safe a causa della presenza del costrutto htmlentities, che solitamente fa parte delle funzioni di sanitizzazione. Nel secondo caso però è presente una sanitizzazione custom costruita con la funzione str\_replace. Siccome str\_replace non fa parte delle funzioni di sanitizzazione, il codice viene marchiato come unsafe ed un warning viene riportato all'utente. Saner consente di eseguire tale sanitizzazione in modo dinamico sfruttando input appositamente malevoli al fine di verificare l'efficacia della sanitizzazione stessa, riducendo il numero di warning.\\
+In un certo senso, Saner automatizza le operazioni che uno sviluppatore dovrebbe fare per verificare se un warning riportato da un tool di analisi statica è effettivamente una problematica di sicurezza.
+
+I risultati riportati dall'autore dimostrano come la fase di analisi dinamica aumenti in modo elevato l'affidabilità del tool. Nell'analisi di cinque applicativi open-source di media complessità, Pixy segnala l'incapacità di determinare il valore della procedura di sanitizzazione per ben 66 sinks. Con l'ausilio dell'analisi dinamica è stato possibile determinare l'effettiva presenza di 14 vulnerabilità, per i restanti 52 sinks l'analisi non è stata in grado di determinare dei valori di input che bypassassero la sanitizzazione.
+
+\section{RIPS}
+
+
+\chapter{Vulture}
+
+\section{Problematiche}
+
+\section{Sviluppi futuri}
+
+\chapter{Discussione}
+
+\chapter{Conclusioni}

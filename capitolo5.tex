@@ -57,20 +57,4 @@ La fase successiva nell'interpretazione di codice PHP consiste nella syntax anal
 
 L'ultima fase che produce risultati validi per un'analisi statica è la fase di bytecode generation. La libreria che si occupa di produrre tale output è \emph{Bytekit} di Stefan Esser. Oltre a riportare una rappresentazione utente del bytecode generato in fase di compilazione, fornisce anche informazioni sul flusso di istruzioni in esecuzione. L'output di questa fase è però a basso livello e complesso da parsare durante un'analisi statica.
 
-\chapter{Comparazione dei principali tool esistenti}
-
-\section{Pixy}
-
-\section{Saner}
-
-\section{RIPS}
-
-\chapter{Vulture}
-
-\section{Problematiche}
-
-\section{Sviluppi futuri}
-
-\chapter{Discussione}
-
-\chapter{Conclusioni}
+I tools analizzati nel documento corrente utilizzano come input valori provenienti dalle fasi di lexical analysis o syntax analysis, che forniscono una rappresentazione ad alto livello del flusso di istruzioni.
