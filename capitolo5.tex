@@ -22,8 +22,40 @@ Oltre a queste problematiche la dinamicità del linguaggio comporta la presenza 
 \begin{itemize}
 \item Valutazione del codice run-time: Il costrutto \emph{eval} consente di eseguire come istruzioni le sequenze di caratteri contenute in una stringa come se fossero codice sorgente. Il contenuto di tale stringa però non è conosciuto prima dell'esecuzione del programma, rendendo di fatto impossibile l'analisi di tale contenuto.
 \item Inclusione run-time di files esterni: In PHP è possibile definire l'inclusione di files a seconda dello stato di variabili valutate run-time. Il valore di tali variabili non è definibile tramite analisi statica.
-\item 
+\item Tipizzazione dinamica dei dati: Il tipo di una variabile non necessita di essere dichiarato e può mutare in modo trasparente a run-time. Questa peculiarità del linguaggio rende complessa la tracciatura dei dati nel flusso di esecuzione poiché possono essere convertiti più volte in modo implicito.
+\item Duck typing: Valori in un oggetto possono essere aggiunti o rimossi in ogni momento dell'esecuzione, facendo si che non risulti possibile predire l'occupazione in memoria dell'oggetto dalla sua dichiarazione.
+\item Aliasing: E' possibile definire alias in grado di referenziare il valore di altre variabili. Tali alias sono mutabili e possono essere creati e distrutti run-time.
+\item Variabili di variabili: Il valore di una stringa può essere usato come indice di un'altra variabile. Ciò è possibile grazie all'uso di una tabella dei simboli al posto di rigide locazioni di memoria.
 \end{itemize}
+
+E' importante poi ricordare come esistano alcune caratteristiche presenti in pressoché tutti i linguaggi che rendono le tecniche di analisi statica molto complesse: 
+\begin{itemize}
+\item Funzioni per la manipolazione di stringhe: la presenza di una libreria per la manipolazione di stringhe rende complessa l'analisi statica poiché è importante conoscere l'esatto significato di ogni funzione al fine di capire dove e come un valore tainted si può propagare.
+\item Espressioni regolari: la manipolazione di stringhe tramite espressioni regolari complica l'analisi. Teoricamente occorrerebbe comprendere il funzionamento dell'espressione regolare e di conseguenza capire se tale espressione è in grado di agire su valori tainted ed in che modo.
+\end{itemize}
+
+\section{Modalità di analisi di codice PHP}
+In letteratura sono presenti diversi approcci all'analisi statica di codice PHP. Come riportato in precedenza, la maggiore differenza riguarda la struttura oggetto in input all'analisi, ovvero quali tipologie di istruzioni vengono processate per ottenere i risultati.\\
+L'input per un tool di analisi statica non è altro che l'output di una delle varie fasi nel processo di interpretazione del codice:
+\begin{itemize}
+\item Codice sorgente
+\item Lexical analysis
+\item Syntax analysis
+\item Bytecode generation
+\end{itemize}
+Il codice sorgente non è mai stato utilizzato efficacemente come input nel campo dell'analisi statica. Le regole lessicali che governano il linguaggio rendono estremamente complessa l'interpretazione del codice, che necessita di essere processato per mezzo di espressioni regolari.\\
+Per tale motivo i primi tool che eseguivano analisi statica di codice PHP prendevano in input uno stream di tokens, ovvero una rappresentazione delle istruzioni indipendente dalle regole lessicali del linguaggio. Tale output è frutto della fase di lexical analysis nel processo di interpretazione del codice.
+Si citano due librerie in grado di convertire da codice sorgente a stream di tokens, \emph{tokenizer}, inclusa nella release di PHP e \emph{PHP\_TokenStream}.
+
+\cite{ESEMPIO TOKENIZER}
+\cite{ESEMPIO TOKENSTREAM}
+
+La prima libreria ha un output più semplice, composto da un array di tre elementi: token, numero di riga e corrispondenza in codice PHP. La seconda libreria invece fornisce come output una serie di tokens rappresentati come oggetti.
+Al termine della conversione, i tool di analisi statica possono così operare su una struttura più semplice da parsare rispetto al puro codice sorgente.
+
+La fase successiva nell'interpretazione di codice PHP consiste nella syntax analysis, ovvero nel parsing per ottenere un abstract syntax tree. Tre librerie sono state individuate per la realizzazione di tale fase: \emph{PHP\_Reflection\_AST}, \emph{parse\_tree} e \emph{PHP\_Parser}. Le prime due risultano abbandonate da anni, non supportano quindi i costrutti delle più recenti release di PHP, l'ultima, sebbene rilasciata come alfa, è attualmente l'unica libreria scritta in PHP in grado di generare un abstract syntax tree di codice sorgente basato su PHP 5.3. Esiste poi un ulteriore promettente tool, chiamato \emph{PHP\_Depend}, che non si occupa di eseguire analisi statica ma analisi delle metriche di codice PHP e che contiene al suo interno una serie di librerie in grado di generare un AST parziale.
+
+L'ultima fase che produce risultati validi per un'analisi statica è la fase di bytecode generation. La libreria che si occupa di produrre tale output è \emph{Bytekit} di Stefan Esser. Oltre a riportare una rappresentazione utente del bytecode generato in fase di compilazione, fornisce anche informazioni sul flusso di istruzioni in esecuzione. L'output di questa fase è però a basso livello e complesso da parsare durante un'analisi statica.
 
 \chapter{Comparazione dei principali tool esistenti}
 
