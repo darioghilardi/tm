@@ -38,9 +38,27 @@ In un certo senso, Saner automatizza le operazioni che uno sviluppatore dovrebbe
 I risultati riportati dall'autore dimostrano come la fase di analisi dinamica aumenti in modo elevato l'affidabilità del tool. Nell'analisi di cinque applicativi open-source di media complessità, Pixy segnala l'incapacità di determinare il valore della procedura di sanitizzazione per ben 66 sinks. Con l'ausilio dell'analisi dinamica è stato possibile determinare l'effettiva presenza di 14 vulnerabilità, per i restanti 52 sinks l'analisi non è stata in grado di determinare dei valori di input che bypassassero la sanitizzazione.
 
 \section{RIPS}
+RIPS è un tool per l'analisi statica di codice PHP rivolto alla ricerca di vulnerabilità sviluppato da Johannes Dahse.
+E' l'unico tool open source scritto in PHP considerato usabile attualmente in sviluppo.\\
+Il tool è in grado di individuare vulnerabilità di tipo XSS, SQL Injection, file disclosure, code evaluation, remote command execution e busines logic flaw attraverso dei rule-sets definiti nei propri file di configurazione.\\
+RIPS lavora in due fasi, costruzione del modello e analisi. Nella fase di costruzione del modello si possono individuare le operazioni di analisi semantica e lessicale, parsing e control flow analysis. Nella fase di analisi si individuano le operazione di taint analysis e local and global analysis.
 
+La fase di analisi lessicale e semantica è caratterizzata dall'uso della libreria built-in \emph{tokenizer} per trasformare i costrutti del linguaggio in uno stream di tokens, attraverso l'uso della funzione \emph{token\_get\_all()} che trasforma ogni istruzione del linguaggio in un array costituito dal token, dal numero di riga dell'istruzione e dal codice originale. Successivamente vengono rimossi i tokens ritenuti inutili per l'analisi, come le spaziature ed il codice HTML, e trasformati alcuni tokens in equivalenti strutture più semplici da parsare (ad esempio vengono convertiti i costrutti di branches realizzati mediante la forma compatta in classici costrutti if-else).\\
+La fase successiva, quella di parsing, avviene attraverso l'analisi dello stream di tokens una sola volta per ogni file, al fine di garantire le migliori performance. In questa fase viene creata per ogni file una lista delle dipendenze e per alcuni costrutti vengono eseguite operazioni particolari. In caso di \emph{T\_INCLUDE} ad esempio lo stream di tokens del file da includere viene aggiunto allo stream corrente, in caso di \emph{T\_VARIABLE} viene controllato lo scope della variabile, ovvero se è una variabile globale o locale, e di conseguenza viene aggiunta ad una lista.\\
+La fase di control flow analysis avviene in modo estremamente diverso da Pixy: se nel tool di Jovanovic si faceva riferimento al control flow graph, in RIPS la generazione dello stesso è stata evitata per problemi di performance. RIPS esegue la control flow analysis sfruttando la presenza di alcuni tokens come le parentesi graffe, \emph{T\_EXIT} e \emph{T\_THROW} che danno indicazioni sulle uscite da flussi di istruzioni.
+
+La fase di analisi si basa sulle direttive definite attraverso array PHP nei file di configurazione. Tali direttive indicano gli input, i sinks, le funzioni di sanitizzazione con i rispettivi parametri da tracciare ed i token da ignorare.\\
+RIPS cerca chiamate a funzioni, controlla se la funzione trovata è nella lista dei sinks ed in caso affermativo valuta i parametri di tale funzione. Una volta individuati i parametri rilevanti controlla nelle liste precedentemente create di variabili globali e locali se tali possono essere o meno tainted. In caso affermativo viene riportata la potenziale vulnerabilità.\\
+RIPS è in grado di determinare se una funzione definita dall'utente è o meno un sink. Nel caso in cui ciò accada infatti l'algoritmo può risalire ai parametri di input e quindi comprendere se il sink è determinato da uno di essi. In caso affermativo oltre alla funzione stessa anche le chiamate ad essa vengono trattate come un sink.
+
+RIPS possiede una configurabile interfaccia web che consente di lanciare la scansione e che riporta i risultati. Tale interfaccia consente di definire per quali vulnerabilità effettuare la scansione, il livello di verbosity della scansione e se comprendere le sottodirectory o meno. Il report dei risultati è dettagliato, vengono mostrate le linee di codice sorgente che riportano problematiche,  
 
 \chapter{Vulture}
+Vulture è un concept/prototipo di tool per analisi statica volta alla ricerca di vulnerabilità di applicazioni web, creato dal sottoscritto in collaborazione con EURECOM.\\
+Il progetto nasce con l'idea di costruire una piattaforma estensibile, alla quale lo sviluppatore può aggiungere i propri insiemi di regole volte alla ricerca di vulnerabilità. 
+
+Vulture non è attualmente completo ed usabile, è stata implementata solo una parte delle caratteristiche progettate. 
+
 
 \section{Problematiche}
 
