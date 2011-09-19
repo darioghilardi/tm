@@ -1,4 +1,4 @@
-\chapter{Comparazione dei principali tool esistenti}
+\chapter{Comparazione dei principali tool open source esistenti}
 Nel seguente capitolo verranno esposte le modalità di funzionamento di alcuni tool che eseguono analisi statica di codice PHP al fine di trovare vulnerabilità. Verranno confrontati gli approcci e verrà valutata la possibile applicabilità durante il normale ciclo di sviluppo software. \\
 Alcuni di questi tool sono effettivamente disponibili, altri sono dei prototipi accademici, altri ancora non supportano le versioni più recenti di PHP. l'obiettivo di tale sezione è quello di illustrare come la ricerca di vulnerabilità tramite analisi statica di codice PHP non presenti soluzioni affermate e si cercherà di spiegarne le motivazioni.
 
@@ -90,15 +90,28 @@ Vulture si presenta con una schermata nella quale viene richiesto di inserire il
 
 Ogni file viene esaminato in tale directory, sottodirectory comprese.\\
 Successivamente il tool genera un AST del codice sorgente fornito in input. La generazione dell'AST avviene per mezzo di un progetto open source sperimentale chiamato PHP-Parser\footnote{CITE}. Sebbene in fase alfa, è attualmente l'unico strumento scritto in PHP in grado di generare un AST di codice sorgente che supporta tutte le caratteristiche dell'attuale release di PHP. Esistono soluzioni alternative abbandonate o incomplete, come php-sat, fermo dal 2006\footnote{CITE}, o PHP\_Depend\footnote{CITE}, che comprende un parser attualmente incompleto.
+L'output di PHP-Parser è il seguente:
 
-Vulture non è attualmente completo ed usabile, è stata implementata solo una parte delle caratteristiche progettate.
+\cite{Incollare codice php parser}
 
+Come si può vedere è una rappresentazione ad alto livello del codice sorgente, sotto forma di array. Sono stati effettuati alcuni test per determinare l'efficacia di PHP-Parser: la scansione completa della codebase di Symfony2 funziona correttamente e richiede circa 35 secondi, un ottimo risultato viste le dimensioni della codebase in esame.
 
-\chapter{Problematiche}
-
+Dopo la generazione dell'AST, è necessario rimuovere gli elementi che non sono di interesse per la scansione.
+Parla di quali elementi
+Parla di come tracciare le variabili
+dì che vulture attualmente si ferma quì
+Parla di assegnamenti
+Parla di cosa fare con include
+Parla di cose fare con if e loop
 
 \section{Sviluppi futuri}
+Vulture non è attualmente completo ed usabile, è stata implementata solo una parte delle caratteristiche progettate.
 
-\chapter{Discussione}
+Cerca di giustificare dicendo che rips è in sviluppo da tre anni, che tali tool sono complessi e rifai riferimento a rice ed alla complessità, cosa che va messa in un nuovo paragrafo nella parte sull'analisi statica
 
 \chapter{Conclusioni}
+Dinamicità di php
+Velocità di php
+perchè non esiste soluzione??
+analisi statica non è precisa
+raggiungimento dell'obiettivo possibile? nel ciclo di sviluppo software
