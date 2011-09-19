@@ -1,0 +1,2 @@
+L'analisi statica è una tecnica che consiste nell'analizzare il flusso di istruzioni del programma senza procederne all'esecuzione. 
+Tale tecnica ha molteplici scopi, dal 

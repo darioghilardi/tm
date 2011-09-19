@@ -51,16 +51,51 @@ La fase di analisi si basa sulle direttive definite attraverso array PHP nei fil
 RIPS cerca chiamate a funzioni, controlla se la funzione trovata è nella lista dei sinks ed in caso affermativo valuta i parametri di tale funzione. Una volta individuati i parametri rilevanti controlla nelle liste precedentemente create di variabili globali e locali se tali possono essere o meno tainted. In caso affermativo viene riportata la potenziale vulnerabilità.\\
 RIPS è in grado di determinare se una funzione definita dall'utente è o meno un sink. Nel caso in cui ciò accada infatti l'algoritmo può risalire ai parametri di input e quindi comprendere se il sink è determinato da uno di essi. In caso affermativo oltre alla funzione stessa anche le chiamate ad essa vengono trattate come un sink.
 
-RIPS possiede una configurabile interfaccia web che consente di lanciare la scansione e che riporta i risultati. Tale interfaccia consente di definire per quali vulnerabilità effettuare la scansione, il livello di verbosity della scansione e se comprendere le sottodirectory o meno. Il report dei risultati è dettagliato, vengono mostrate le linee di codice sorgente che riportano problematiche,  
+RIPS possiede una interfaccia web configurabile che consente di lanciare la scansione e che riporta i risultati. Tale interfaccia consente di definire per quale tipologia di vulnerabilità effettuare la scansione, il livello di verbosity e se comprendere le sottodirectory o meno. Il report dei risultati è dettagliato, vengono mostrate le linee di codice sorgente che riportano problematiche comprensive di motivazione, è possibile visualizzare un grafico delle chiamate che devono essere effettuate per raggiungere un certo sink e viene utilizzata la syntax highlighting per mostrare le linee di codice coinvolte.
+
+Nei test effettuati alla Ruhr-University Bochum su una piattaforma ad uso interno, RIPS è stato in grado di esaminare 16870 linee di codice in 84 files, per un totale di 181 funzioni in 2.3 secondi. Nei risultati sono stati individuati diversi falsi positivi, dovuti all'uso di espressioni regolari per la sanitizzazione, metodologia non contemplata nell'analisi effettuata da RIPS, ed all'uso di fwrite per scrivere su file di testo. A seconda del livello di verbosity utilizzato varia il numero di falsi positivi riscontrati, poichè vengono incluse nei risultati delle vulnerabilità sospette ma non verificate.
+
+RIPS è un tool che ben si adatta all'analisi statica per la ricerca di vulnerabilità. E' veloce, è configurabile con diversi livelli di verbosità, possiede una semplice e comprensibile interfaccia per il report dei risultati e produce un basso numero di falsi positivi.\\
+Sebbene possieda le classiche limitazioni dei tool di analisi statica, come l'incapacità di valutare stringhe generate a run-time, nel caso di inclusioni dinamiche di files o nel caso di chiamate dinamiche a funzioni che ne riducono l'accuratezza, l'estrema velocità rende adatto il suo utilizzo all'interno nel ciclo di sviluppo software.
+RIPS è un tool in sviluppo ed attualmente non supporta completamente la semantica di PHP, ad esempio alcuni costrutti particolari come variabili di variabili o l'aliasing. Inoltre non supporta i costrutti tipici di PHP 5, ma supporta solo in modo basilare la dichiarazione di classi, oggetti e metodi.
+
+L'approccio proposto da un tool come RIPS è estremamente differente da quello proposto da Pixy. RIPS è stato implementato con l'obiettivo di essere veloce e di riportare in modo chiaro i risultati, spiegando come una vulnerabilità funziona al posto di semplicemente specificare la linea in cui essa si trova, Pixy invece possiede un meccanismo di scansione più accurato ed ha come obiettivo il riuscire a riportare il minor numero di falsi positivi in assoluto.
 
 \chapter{Vulture}
-Vulture è un concept/prototipo di tool per analisi statica volta alla ricerca di vulnerabilità di applicazioni web, creato dal sottoscritto in collaborazione con EURECOM.\\
-Il progetto nasce con l'idea di costruire una piattaforma estensibile, alla quale lo sviluppatore può aggiungere i propri insiemi di regole volte alla ricerca di vulnerabilità. 
+Vulture è un prototipo di tool per analisi statica volta alla ricerca di vulnerabilità di applicazioni web, progettato in collaborazione con EURECOM durante lo svolgimento di questo lavoro di tesi.\\
+Nato inizialmente con l'obiettivo di produrre un sistema in grado di rilevare vulnerabilità di tipo Http Parameter Pollution server side, è stato generalizzato al fine di costruire una piattaforma estensibile, alla quale lo sviluppatore può aggiungere i propri insiemi di regole.\\
+Inizialmente si è pensato di lavorare all'estensione di un tool esistente, in modo da aggiungere solo la parte di codice riguardante Http Parameter Pollution. Purtroppo però i candidati, analizzati in precedenza in questo documento, presentavano problematiche di progettazione rilevanti, che non potevano essere risolte facilmente ma avrebbero comportato la riscrittura di grosse porzioni del tool stesso. 
+Le caratteristiche individuate come fondamentali erano le seguenti:
+\begin{itemize}
+\item Supporto a PHP 5
+\item Possibilità di modifica della codebase
+\item Estensibilità
+\item Velocità di scansione
+\item Basso numero di falsi positivi
+\item Supporto
+\end{itemize}
+La possibilità di modifica della codebase implicava che il tool fosse open source, gli unici due tools opensource rilevanti sono Pixy e RIPS.
+Pixy non supporta però PHP 5, non è supportato dall'autore o da una community, non presenta una rilevante velocità di scansione ma è in grado di riportare un basso numero di falsi positivi grazie al supporto agli alias.
+RIPS invece non supporta gli alias, caratteristica non molto utilizzata in PHP, e non fornisce come Pixy pieno supporto a classi, metodi ed oggetti, introdotti da PHP 5. Nonostante ciò è veloce e supportato dall'autore, caratteristiche fondamentali per la scelta di un tool sul quale lavorare.\\
+Purtroppo però la codebase di RIPS si è rivelata decisamente problematica da estendere e modificare, il codice sorgente in formato procedurale con funzioni da migliaia di righe poco commentate hanno reso di fatto più semplice la riscrittura del tool rispetto al refactoring del codice esistente. Oltretutto RIPS possiede un approccio all'analisi basato sulla funzione tokenizer di PHP, ritenuta ad un livello troppo basso, ovvero troppo vicino al codice sorgente per l'analisi statica.
 
-Vulture non è attualmente completo ed usabile, è stata implementata solo una parte delle caratteristiche progettate. 
+La soluzione ideale è stata individuata in un tool in grado di generare e parsare l'abstract syntax tree del codice sorgente, ottenendo una rappresentazione ad alto livello sulla quale effettuare la scansione. Il tool deve essere veloce, estensibile affinché sia possibile per uno sviluppatore aggiungere delle regole personalizzate per la ricerca di vulnerabilità. Quest'ultima caratteristica porta ad una considerazione: il tool verrà usato per trovare vulnerabilità nel codice sorgente scritto in PHP, quindi da sviluppatori che normalmente lavorano con tale linguaggio. Se si vuole che il tool venga poi esteso dalla community, difficilmente si potrà attenere un riscontro se lo scrive in un linguaggio diverso da PHP, proprio perché le competenze di chi lo userà sono focalizzate su quel linguaggio.\\
+
+Vulture è un tool scritto in PHP dotato di un'interfaccia web. Non necessita di database e l'unico requisito per utilizzarlo è un web server. Il tool è basato su Symfony 2, un framework per la realizzazione di applicazioni web scritto in PHP da Fabien Potencier. Tale scelta è stata effettuata poiché tale framework fornisce le più comuni caratteristiche di un'applicazione web, come il meccanismo di routing delle pagine e la separazione tra logica e presentazione.\\
+L'utilizzo di Symfony 2 non comporta un overhead per la visualizzazione delle pagine ed evita che si debba reinventare la ruota per problematiche già affrontate e di scarso interesse per il fulcro del tool di analisi statica.
+
+Vulture si presenta con una schermata nella quale viene richiesto di inserire il percorso alla directory contenente il codice sorgente da analizzare. 
+
+\cite{IMMAGINE VULTURE INIZIALE}
+
+Ogni file viene esaminato in tale directory, sottodirectory comprese.\\
+Successivamente il tool genera un AST del codice sorgente fornito in input. La generazione dell'AST avviene per mezzo di un progetto open source sperimentale chiamato PHP-Parser\footnote{CITE}. Sebbene in fase alfa, è attualmente l'unico strumento scritto in PHP in grado di generare un AST di codice sorgente che supporta tutte le caratteristiche dell'attuale release di PHP. Esistono soluzioni alternative abbandonate o incomplete, come php-sat, fermo dal 2006\footnote{CITE}, o PHP\_Depend\footnote{CITE}, che comprende un parser attualmente incompleto.
+
+Vulture non è attualmente completo ed usabile, è stata implementata solo una parte delle caratteristiche progettate.
 
 
-\section{Problematiche}
+\chapter{Problematiche}
+
 
 \section{Sviluppi futuri}
 
