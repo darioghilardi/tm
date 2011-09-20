@@ -94,24 +94,37 @@ L'output di PHP-Parser è il seguente:
 
 \cite{Incollare codice php parser}
 
-Come si può vedere è una rappresentazione ad alto livello del codice sorgente, sotto forma di array. Sono stati effettuati alcuni test per determinare l'efficacia di PHP-Parser: la scansione completa della codebase di Symfony2 funziona correttamente e richiede circa 35 secondi, un ottimo risultato viste le dimensioni della codebase in esame.
+Come mostrato nell'immagine è una rappresentazione ad alto livello del codice sorgente, sotto forma di array. Sono stati effettuati alcuni test per determinare l'efficacia di PHP-Parser: la scansione completa della codebase di Symfony2 funziona correttamente e richiede circa 35 secondi, un ottimo risultato viste le dimensioni della codebase in esame.
 
-Dopo la generazione dell'AST, è necessario rimuovere gli elementi che non sono di interesse per la scansione.
-Parla di quali elementi
-Parla di come tracciare le variabili
-dì che vulture attualmente si ferma quì
-Parla di assegnamenti
-Parla di cosa fare con include
-Parla di cose fare con if e loop
+Dopo la generazione dell'AST, si utilizza una metodologia di traversing dello stesso, identificando gli elementi utili a seconda della vulnerabilità che si sta cercando. Per determinare quali essi siano si usano i bundle di Symfony: la definizione di un nuovo bundle con una determinata struttura di files viene riconosciuta automaticamente come la definizione di un set di regole per la ricerca di una nuova vulnerabilità.t
+Ogni bundle costruito per Vulture consente la definizione di un set di input, un set di sinks ed un set di funzioni di sanitizzazione. E' su questi tre parametri che Vulture basa la sua scansione, in modo similare a quanto eseguito da RIPS.\\
+ 
+Durante la scansione Vulture salva in memoria le variabili che vengono a contatto con valori tainted, ovvero alle quali vengono assegnati valori provenienti dall'input. Tali variabili vengono custodite in un array, che viene aggiornato ad ogni istruzione processata con le eventuali nuove variabili che divengono tainted a causa di assegnamenti. Se si incontra una funzione di sanitizzazione applicata su una variabile di tipo tainted, Vulture rimuove la variabile dall'array. Se invece si incontra un sink con una variabile presente nell'array tainted Vulture segnala una nuova vulnerabilità. Al fine di poter determinare se una funzione di sanitizzazione è efficace non basta che si identifichi la variabile come parametro della stessa, occorre conoscere anche in quale parametro viene posizionata: le funzioni in PHP sono state definite senza una cognizione, capita che il parametro sul quale viene applicata la funzione sia in prima posizione in alcuni casi, in seconda in altri. Per tale motivo è necessario definire un vocabolario di funzioni con le rispettive posizioni per i parametri in input, al fine di poter determinare se il parametro è posizionato o meno nel punto corretto per la sanitizzazione. Questo caos è una delle caratteristiche che hanno contribuito a ritenere PHP un linguaggio poco strutturato e l'hanno portato ad essere valutato negativamente dalle community di sviluppatori di altri linguaggi\footnote{http://www.codinghorror.com/blog/2008/05/php-sucks-but-it-doesnt-matter.html}.\\
+Quando vengono incontrate delle inclusioni, Vulture apre il file collegato e lo include nel flusso corrente costruendo un flusso unico continuo sul quale eseguire la scansione.
 
-\section{Sviluppi futuri}
-Vulture non è attualmente completo ed usabile, è stata implementata solo una parte delle caratteristiche progettate.
+Attualmente il tool non è usabile e completo. Costruire un tool di analisi statica da zero è un problema complesso che non poteva essere risolto unicamente nel solo corso di questa tesi. Tool come RIPS e Pixy hanno richiesto anni di sviluppo (per la precisione RIPS è in sviluppo da 3 anni, Pixy è stato in sviluppo per all'incirca lo stesso tempo), e sono comunque loro stessi incompleti per quanto riguarda il supporto a classi, oggetti ed ai restanti costrutti di PHP 5.
+Nonostante ciò sono state progettate le fasi successive per lo sviluppo di Vulture, anche se non implementate:
 
-Cerca di giustificare dicendo che rips è in sviluppo da tre anni, che tali tool sono complessi e rifai riferimento a rice ed alla complessità, cosa che va messa in un nuovo paragrafo nella parte sull'analisi statica
+\begin{itemize}
+\item Loop e branches: Vulture non supporterà loop e branches al fine di rendere la scansione più veloce possibile.
+\item Sanitizzazioni custom: Vulture non supporterà sanitizzazioni custom, frutto ad esempio di espressioni regolari. Sarà però flessibile, in quanto consentirà al definizione manuale di funzioni di sanitizzazione, utile nel caso in cui si utilizzino dei framework che forniscono funzioni aggiuntive oltre a quelle del linguaggio. E' ovviamente un arma a doppio taglio, definire una funzione di sanitizzazione custom errata può risultare disastroso quindi occorre la massima cautela.
+\item Inclusioni e chiamate a funzioni dinamiche: Vulture, come tutti i tools di analisi statica, non è in grado di valutare inclusioni o chiamate a funzioni dinamiche. In questo caso verrà riportata una segnalazione.
+\item Aliasing delle variabili: L'aliasing delle variabili non è una caratteristica molto utilizzata in PHP. Realizzare un sistema in grado di valutare l'applicazione di tale funzionalità nell'analisi statica è molto complesso, ed il valore di ritorno sarebbe minimo, valido solo per le applicazioni che sfruttano tale caratteristica. Per tali ragioni lo sviluppo di tale funzionalità è stato posticipato.
+\item Definizioni di classi e metodi e relative chiamate: Il supporto a PHP 5 non è stato realizzato da alcun tool attualmente. Vulture si pone questo obiettivo per avere il pieno supporto alle applicazioni PHP moderne. L'idea alla base della realizzazione di tale funzionalità consiste nel trattare in modo particolare le classi con tutta una serie di accorgimenti, senza snaturare il funzionamento del tool. Sarà prevista una libreria di supporto che si occuperà di riconoscere i costrutti tipici delle classi e dei relativi oggetti e metodi.
+\end{itemize}
+
+Oltre alle caratteristiche analizzate fin'ora, PHP 5.3, un'ulteriore evoluzione del linguaggio, ha introdotto alcune novità come i namespace, le closures ed il late static binding. Tali strutture non sono attualmente previste nell'implementazione di Vulture ma sono senza dubbio fondamentali affinchè sia possibile effettuare la scansione di moderne applicazioni web, per tale motivo questo è una delle problematiche su cui sarà importante concentrarsi in futuro.
+
+\chapter{Discussione}
+In questo documento sono state analizzate molte
+
+parla di analisi tool commerciali
+parla di confronto con open 
+parla del contributo dei tool di analisi statica
+parla di educazione degli sviluppatori dal punto di vista della security
 
 \chapter{Conclusioni}
-Dinamicità di php
-Velocità di php
-perchè non esiste soluzione??
-analisi statica non è precisa
-raggiungimento dell'obiettivo possibile? nel ciclo di sviluppo software
+L'analisi statica finalizzata alla ricerca di vulnerabilità è una tecnologia promettente per ridurre le problematiche di sicurezza nelle applicazioni web moderne. La velocità di esecuzione consente l'integrazione di tale tecnica all'interno del ciclo di sviluppo software, facilitando il riconoscimento di vulnerabilità ed annullando la finestra di esposizione in quanto si va a sostituire il meccanismo di riconoscimento a posteriori con un sistema di integrazione continua. Ciò contribuisce anche ad abbassare i costi di gestione grazie all'immediata risposta fornita dal tool.
+Per tali motivi l'analisi statica, sebbene imprecisa, può aggiungersi alla review del codice e fornire un grosso contributo nello sviluppo di applicazioni web sicure.\\
+La creazione di un tool di analisi statica non è però un compito semplice, specialmente per linguaggi estremamente dinamici come PHP. L'impossibilità di valutare i tipi di dato, le inclusioni dinamiche e le chiamate a funzioni dinamiche sono solo alcune delle problematiche che non è possibile risolvere con la sola analisi statica e che influiscono pesantemente sui risultati delle scansioni.\\
+Nonostante queste evidenti limitazioni, il settore dell'analisi statica è un ramo quasi inesplorato ed estremamente promettente, che potrebbe fare la fortuna di chi si dedicherà alla produzione del primo tool in grado di supportare i costrutti di PHP 5 e potrebbe essere un enorme passo avanti in una community di sviluppatori da sempre poco attenti alle problematiche di security.
