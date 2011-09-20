@@ -19,6 +19,16 @@ Il codice sorgente non è esente da errori bensì ha l'intrinseca proprietà di 
 Al fine di ridurre il quantitativo di difetti nel software e di aderire agli standard i programmatori hanno pensato di sviluppare altro software in grado di analizzare il codice sorgente di un programma durante la fase di sviluppo.\\
 Tale analisi è detta \emph{analisi statica} ed è una tecnica che consiste nell'ispezionare automaticamente il codice sorgente di un software senza però eseguirlo. Il grosso vantaggio di tale tecnica consiste nella sua applicazione alla radice del processo di sviluppo, in contrasto alle esistenti tecniche di testing che vedevano posticipata la correzione dei difetti alla fase di pre-rilascio. Anticipare l'identificazione del difetto software comporta minori costi di correzione; è proprio questo il motivo del successo dell'analisi statica.
 
+\section{Il problema}
+Alan Touring\cite{CITAZIONE} nel 1937 affermò che esistono due tipologie di problemi: problemi decidibili, per i quali esiste un algoritmo (quindi una procedura eseguibile con un numero finito di passi) in grado di risolverli e problemi non decidibili, per i quali non esiste alcun algoritmo in grado di dare una risposta in tempo finito su tutte le istanze del problema. Henry Gordon Rice estese tale teorema, asserendo che la dimensione dello stato di
+
+In altre
+parole non esiste alcun metodo meccanico in grado di determinare sempre se un dato
+programma puo o non puo generare errori d’esecuzione (problema della terminazione
+[44] e teorema di Rice [13]). Esistono comunque alcune tecniche formali di analisi
+statica che tentano di fornire soluzioni che approssimano i risultati. Alcune di queste
+tecniche sono:
+
 \section{Storia}
 Il primo approccio all'analisi statica è storicamente da attribuire al tool di Unix \emph{grep} (General Regular Expression Print), che ricerca in uno o più file di testo le linee che corrispondono ad uno o più modelli specificati con espressioni regolari o stringhe letterali e produce un elenco di linee in cui è stata trovata una corrispondenza.
 Grep non conosce nessun dettaglio dei files che sta esaminando, li interpreta semplicemente come files di testo, di conseguenza sebbene possa produrre risultati apprezzabili con determinati pattern di ricerca non si può considerare come un vero e proprio tool di analisi statica. \\
