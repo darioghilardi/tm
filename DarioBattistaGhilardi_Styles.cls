@@ -10,6 +10,7 @@
 \newif\if@righeNumerate \@righeNumeratefalse								% per default le righe non sono numerate
 \newif\if@righeNumeratePerPagina \@righeNumeratePerPaginafalse				% per default le righe non sono numerate
 \newif\if@prefazione \@prefazionefalse										% per default nessuna prefazione
+\newif\if@ringraziamenti \@ringraziamentifalse								% per default nessun ringraziamento
 
 \newif\if@listaFigureInizio \@listaFigureIniziofalse						% per default nessuna lista figure
 \newif\if@listaFigureFine \@listaFigureFinefalse							% per default nessuna lista figure
@@ -31,6 +32,7 @@
 \DeclareOption{linea}{\@lineatrue}
 \DeclareOption{titoliSinistra}{\@titoliSinistratrue}
 \DeclareOption{prefazione}{\@prefazionetrue}
+\DeclareOption{ringraziamenti}{\@ringraziamentitrue}
 %\DeclareOption{listaFigureInizio} {
 %	\@listaFigureFinefalse
 %	\@listaFigureIniziotrue
@@ -265,6 +267,11 @@
 		\chapter*{Prefazione}
 		\input{prefazione} 
 		%\addcontentsline{toc}{chapter}{Prefazione} 
+	\else \fi
+	\if@ringraziamenti 
+		\chapter*{Ringraziamenti}
+		\input{ringraziamenti} 
+		%\addcontentsline{toc}{chapter}{Ringraziamenti} 
 	\else \fi
 	%% TOC
 	\tableofcontents
