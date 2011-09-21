@@ -127,7 +127,38 @@ Le altre vulnerabilità citate in OWASP Top Ten ma non riportate nella sezioni p
 \item Failure to restrict URL access: E' comune per un'applicazione web controllare i permessi di accesso all'URL prima di visualizzare contenuti protetti. Tuttavia le applicazioni necessitano che questi controlli vengano eseguiti ogni volta che queste pagine vengono accedute o gli attaccanti saranno in grado di costruire URL appositi per accedere a tali risorse senza i permessi.
 \item Insufficient transport layer protection: Le applicazioni spesso falliscono nel proteggere la confidenzialità e l'integrità del traffico di rete. Questo poiché talvolta utilizzano algoritmi non corretti, certificati non validi o scaduti, non implementano SSL oppure falliscono l'implementazione delle best practice per questa problematica.
 \item Unvalidated redirects and forwards: Può capitare che un'applicazione redirezioni l'utente verso altre pagine o siti web, usando dati non sicuri per determinare le pagine di destinazione. Senza l'appropriata validazione un attaccante può redirezionare la vittima verso phishing o siti contenenti malware.
-\end{itemize} 
+\end{itemize}
+
+\subsection{Http Parameter Pollution}
+Http Parameter Pollution (HPP) è una vulnerabilità di tipo injection presentata per la prima volta nel 2009 da di Paola e Carrettoni\cite{27 su hpp}. Sebbene troppo recente per essere inclusa nella OWASP Top Ten, questa vulnerabilità è la motivazione che ha portato alla nascita di Vulture, il tool che verrà presentato successivamente in questa tesi.\\
+HPP consiste nell'inserimento nell'input di un'applicazione web una particolare query string a parametri encodati la quale, se l'applicazione non esegue una sanitizzazione dei valori in input, può consentire ad un utente malevolo di comprometterne la logica.
+
+La RFC 3986\cite{8 su hpp} specifica che la query string è la parte dell'URI compresa tra il carattere "?" e la fine dell'URI stesso. Normalmente la query string è composta da una serie di coppie chiave=valore che identificano i valori in input, separate da un carattere "\&" oppure ";". Al fine di evitare incomprensioni con i separatori, ogni carattere speciale viene encodato in forma esadecimale.	\\
+A seconda della tecnologia in cui l'applicazione è stata sviluppata, la query string viene però interpretata in modo differente: se esistono coppie chiave=valore con la stessa chiave, l'applicazione può prendere in input il primo dei due valori, l'ultimo, oppure una combinazione di entrambi.\\
+Nella tabella\ref{Tabella 1 hpp} si mostra in dettaglio il funzionamento dell'applicazione a seconda della tecnologia usata.
+
+La presenza di più valori per la stessa chiave della query string può portare a comportamenti indesiderati dell'applicazione, è quindi fonte di attacchi da parte di utenti malintenzionati.\\
+Uno scenario tipico consiste nel far si che la vittima dell'attacco venga direzionata verso un URL che sfrutta una vulnerabilità di tipo HPP. Supponendo che l'applicazione in questione sia un sistema scritto in JSP per individuare il giorno migliore in cui effettuare un meeting, che riceve in input un singolo parametro chiamato \emph{meeting\_id}, al fine di identificare univocamente il meeting stesso, l'attaccante potrebbe effettuare HPP sulla query string con lo scopo di modificare i valori dei link che segnalano il giorno di preferenza dell'utente.
+Nel normale funzionamento dell'applicazione i link generati sono i seguenti:
+
+\begin{lstlisting}[language=HTML]
+http://example.com/choice.jsp?meeting_id=1234
+
+Link 1: <a href="http://example.com/choice.jsp?meeting_id=1234&day=20111201">1 dicembre 2011</a>
+Link 1: <a href="http://example.com/choice.jsp?meeting_id=1234&day=20111202">2 dicembre 2011</a>
+\end{lstlisting}
+
+L'attaccante aggiunge alla query string il valore encodato \emph{day=20111202} che rende la scelta dell'utente indifferente grazie all'attacco di tipo HPP:
+
+\begin{lstlisting}[language=HTML]
+http://example.com/choice.jsp?meeting_id=1234%26day%3D20111202
+
+Link 1: <a href="http://example.com/choice.jsp?meeting_id=1234\%26day\%3D20111202&day=20111201">1 dicembre 2011</a>
+Link 1: <a href="http://example.com/choice.jsp?meeting_id=1234\%26day\%3D20111202&day=20111202">2 dicembre 2011</a>
+\end{lstlisting}
+
+Nel secondo caso, visto che il funzionamento di JSP con i doppi parametri in query string consiste nel scegliere sempre il primo valore tra quelli con la stessa chiave, qualunque link l'utente clicchi la sua scelta sarà sempre salvata come 1 dicembre 2011.\\
+Esistono alcune varianti di HPP che si rifanno però sempre all'injection di valori nella query string ed alle precedenze nell'uso di tali valori da parte dell'applicazione. E' quindi compito dello sviluppatore controllare la reazione dell'applicazione all'invio di parametri multipli.
 
 \section{Security development life cycle}
 Tutte le realtà che si occupano di sviluppo software implementano un modello che definisce le fasi entro cui lo sviluppo prende parte. Tali fasi sono definite nel software development life cycle (SDLC).\\
