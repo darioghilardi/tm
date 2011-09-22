@@ -1,5 +1,27 @@
 \begin{thebibliography}{10}
 
+\bibitem{flawfinder}
+{Flawfinder}.
+\newblock \url{http://www.dwheeler.com/flawfinder/}, 2010.
+
+\bibitem{pql}
+{PQL: A language for expressing patterns of events on objects. It provides a
+  frontend to static and dynamic program analyses to go find those sequences on
+  the program as it runs.}
+\newblock \url{http://pql.sourceforge.net/}, 2010.
+
+\bibitem{splint}
+{Splint}.
+\newblock \url{http://www.splint.org/}, 2010.
+
+\bibitem{hiphop}
+{HipHop for PHP: transforms PHP source code into highly optimized C++.}
+\newblock \url{https://github.com/facebook/hiphop-php}, 2011.
+
+\bibitem{php}
+{PHP: hypertext Preprocessor}.
+\newblock \url{http://www.php.net}, 2011.
+
 \bibitem{hppbalduzzi}
 Marco Balduzzi.
 \newblock {HTTP Parameter Pollution Vulnerabilities in Web Applications}.
@@ -12,6 +34,13 @@ Marco Balduzzi, Christian Platzer, Thorsten Holz, Engin Kirda, Davide
 \newblock In {\em Preceeding of the 13th international conference on Recent
   advances in intrusion detection}, pages 422--441, Berlin, Heidelberg, 2010.
   Springer-Verlag.
+
+\bibitem{saner}
+D.~Balzarotti, M.~Cova, V.~V. Felmetsger, N.~Jovanovic, E.~Kirda, C.~Kruegel,
+  and G.~Vigna.
+\newblock {Saner: Composing Static and Dynamic Analysis to Validate
+  Sanitization in Web Applications}.
+\newblock In {\em In Proceedings of the 2008 IEEE Symposium on Security}, 2008.
 
 \bibitem{rfc3986}
 Tim Berners~Lee, Roy Fielding, and Larry Masinter.
@@ -37,6 +66,11 @@ Monica Chew and Ben Laurie.
 \newblock In {\em Preecedings of Web 2.0 Security and Privacy Workshop (W2SP)},
   2008.
 
+\bibitem{its4}
+Cigital.
+\newblock {ITS4: A Static Vulnerability Scanner for C and C++ Code}.
+\newblock \url{http://www.cigital.com/its4/}, 2010.
+
 \bibitem{dipaola}
 Stefano di~Paola and Luca Carrettoni.
 \newblock {HTTP Parameter Pollution}.
@@ -55,6 +89,11 @@ Catherine Dwyer and Starr~Roxanne Hiltz.
 Brad Fitzpatrick and David Recordon.
 \newblock {Thoughts on the Social Graph}.
 \newblock \url{http://bradfitz.com/social-graph-problem}, 2007.
+
+\bibitem{rats}
+Fortify.
+\newblock {RATS: Rough Auditing Tool for Security}.
+\newblock \url{http://www.fortify.com/security-resources/rats.jsp}, 2010.
 
 \bibitem{Gross2005}
 Ralph Gross, Alessandro Acquisti, and H~John~Heinz Iii.
@@ -107,10 +146,29 @@ Nick Nikiforakis, Marco Balduzzi, Steven~Van Acker, Wouter Joosen, Davide
 \newblock {Exposing the Lack of Privacy in File Hosting Services}.
 \newblock {\em Sophia}, 2010.
 
+\bibitem{topten}
+OWASP.
+\newblock {Top Ten Project}.
+\newblock \url{https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project},
+  2010.
+
 \bibitem{parker}
 Donn~B. Parker.
 \newblock {\em Fighting Computer Crime}.
 \newblock John Wiley \& Sons, Inc., 1998.
+
+\bibitem{rice}
+Henry~Gordon Rice.
+\newblock {Classes of recursively enumerable sets and their decision problems}.
+\newblock In {\em Transactions of the American Mathematical Society}, pages
+  358--366, 1953.
+
+\bibitem{turing}
+Alan Turing.
+\newblock {On computable numbers, with an application to the
+  Entscheidungsproblem}.
+\newblock In {\em Proceedings of the London Mathematical Society}, volume~42,
+  pages 230--265, 1936.
 
 \bibitem{Yuill}
 J.~Yuill, M.~Zappe, D.~Denning, and F.~Feer.
