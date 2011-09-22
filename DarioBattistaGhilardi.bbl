@@ -1,5 +1,10 @@
 \begin{thebibliography}{10}
 
+\bibitem{hppbalduzzi}
+Marco Balduzzi.
+\newblock {HTTP Parameter Pollution Vulnerabilities in Web Applications}.
+\newblock In {\em BlackHat Europe 2011}, 2011.
+
 \bibitem{Balduzzi}
 Marco Balduzzi, Christian Platzer, Thorsten Holz, Engin Kirda, Davide
   Balzarotti, and Christopher Kruegel.
@@ -7,6 +12,11 @@ Marco Balduzzi, Christian Platzer, Thorsten Holz, Engin Kirda, Davide
 \newblock In {\em Preceeding of the 13th international conference on Recent
   advances in intrusion detection}, pages 422--441, Berlin, Heidelberg, 2010.
   Springer-Verlag.
+
+\bibitem{rfc3986}
+Tim Berners~Lee, Roy Fielding, and Larry Masinter.
+\newblock {RFC 3986, Uniform Resource Identifier (uri): Generic Syntax}.
+\newblock \url{http://datatracker.ietf.org/doc/rfc3986/}, 2005.
 
 \bibitem{Bilge2009}
 Leyla Bilge, Thorsten Strufe, Davide Balzarotti, and Engin Kirda.
@@ -26,6 +36,13 @@ Monica Chew and Ben Laurie.
 \newblock {( Under ) mining Privacy in Social Networks}.
 \newblock In {\em Preecedings of Web 2.0 Security and Privacy Workshop (W2SP)},
   2008.
+
+\bibitem{dipaola}
+Stefano di~Paola and Luca Carrettoni.
+\newblock {HTTP Parameter Pollution}.
+\newblock
+  \url{https://www.owasp.org/images/b/ba/AppsecEU09_CarettoniDiPaola_v0.8.pdf},
+  2009.
 
 \bibitem{Dwyer2007}
 Catherine Dwyer and Starr~Roxanne Hiltz.
@@ -63,6 +80,12 @@ Jesper~M. Johansson and Roger Grimes.
 \newblock
   \url{http://technet.microsoft.com/en-us/magazine/2008.06.obscurity.aspx}.
 
+\bibitem{pixy}
+Nenad Jovanovic, Christopher Kruegel, and Engin Kirda.
+\newblock {Pixy: A Static Analysis Tool for Detecting Web Application
+  Vulnerabilities (Short Paper)}.
+\newblock In {\em 2006 IEEE Symposium on Security and Privacy}, 2006.
+
 \bibitem{Korolova2010}
 Aleksandra Korolova.
 \newblock {Privacy Violations Using Microtargeted Ads : A Case Study}.
@@ -83,6 +106,11 @@ Nick Nikiforakis, Marco Balduzzi, Steven~Van Acker, Wouter Joosen, Davide
   Balzarotti, and Sophia Antipolis.
 \newblock {Exposing the Lack of Privacy in File Hosting Services}.
 \newblock {\em Sophia}, 2010.
+
+\bibitem{parker}
+Donn~B. Parker.
+\newblock {\em Fighting Computer Crime}.
+\newblock John Wiley \& Sons, Inc., 1998.
 
 \bibitem{Yuill}
 J.~Yuill, M.~Zappe, D.~Denning, and F.~Feer.

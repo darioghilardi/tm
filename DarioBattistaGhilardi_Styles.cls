@@ -112,7 +112,7 @@
 \lstset{language=PHP,
    keywords={wait,case,else,elseif,end,for,function,
       if,assign,while,foreach},
-   basicstyle=\ttfamily,
+   basicstyle=\ttfamily\footnotesize,
    keywordstyle=\color{blue},
    commentstyle=\color{red},
    stringstyle=\color{magenta},
@@ -124,7 +124,9 @@
    tabsize=2,
    showspaces=false,
    showstringspaces=false,
-   breaklines=true
+   breaklines=true,
+   xleftmargin=13pt,
+   frame=single
 } 
 
 %% Epigraph settings

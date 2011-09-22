@@ -27,10 +27,10 @@ La grossa problematica che affligge Pixy è data dal fatto che non è in grado d
 Sebbene fosse molto promettente nel periodo in cui è stato sviluppato, il tool non riceve aggiornamenti dal 2007 e risulta effettivamente abbandonato. La mancanza di una solida community ha fatto si che nessuna terza parte abbia forkato il progetto per proseguirne lo sviluppo, rendendolo ormai troppo datato per l'utilizzo su codice sorgente attuale.
 
 Secondo i risultati dei test eseguiti dall'autore[12 su paper depoel] Pixy ha una percentuale di falsi positivi che si aggira intorno al 50\%, soglia considerata dall'autore stesso accettabile per un tool di analisi statica su un linguaggio fortemente dinamico come PHP. Secondo le analisi eseguite da de Poel[CITAZONE] nel 2010, durante la scansione del codice sorgente di alcuni progetti open source viene dimostrato che Pixy non è in grado di funzionare con codebase recenti, la scansione ha riportato risultati per solo cinque su sedici dei software analizzati e, neppure in questi casi, i risultati sono stati attendibili.
-
+		
 \section{Saner}
 Saner è un prototipo, basato su Pixy, che combina le peculiarità di un'analisi statica con quelle di un'analisi dinamica.
-Sviluppato da Balzarotti et.al.\cite{CITAZIONE} dimostra come sia possibile combinare due approcci a prima vista molto differenti per migliorare i risultati ottenuti.\\
+Sviluppato da Balzarotti et.al.\ref{parker}(balzarotti) dimostra come sia possibile combinare due approcci a prima vista molto differenti per migliorare i risultati ottenuti.\\
 La parte di analisi statica viene eseguita da Pixy, che si occupa di determinare in che modo l'applicazione processa l'input, individuando eventuali sanitizzazioni incomplete. Successivamente interviene una fase di analisi dinamica che si occupa di ricostruire il codice responsabile per la sanitizzazione dell'input. Una volta ricostruito, Saner processa tale codice con input malevoli per individuare eventuali problemi nelle sanitizzazioni.\\
 Facendo affidamento sull'analisi dinamica, Saner è in grado di valutare eventuali sanitizzazioni custom al posto di reputarle direttamente come inaffidabili, cosa che il solo Pixy era costretto a fare.\\
 Nell'esempio seguente viene evidenziato il valore del contributo dell'analisi dinamica nella scelta della giusta decisione da intraprendere.
@@ -91,13 +91,13 @@ L'utilizzo di Symfony 2 non comporta un overhead per la visualizzazione delle pa
 
 Vulture si presenta con una schermata nella quale viene richiesto di inserire il percorso alla directory contenente il codice sorgente da analizzare. 
 
-\cite{IMMAGINE VULTURE INIZIALE}
+\ref{parker}(IMMAGINE VULTURE INIZIALE)
 
 Ogni file viene esaminato in tale directory, sottodirectory comprese.\\
 Successivamente il tool genera un AST del codice sorgente fornito in input. La generazione dell'AST avviene per mezzo di un progetto open source sperimentale chiamato PHP-Parser\footnote{CITE}. Sebbene in fase alfa, è attualmente l'unico strumento scritto in PHP in grado di generare un AST di codice sorgente che supporta tutte le caratteristiche dell'attuale release di PHP. Esistono soluzioni alternative abbandonate o incomplete, come php-sat, fermo dal 2006\footnote{CITE}, o PHP\_Depend\footnote{CITE}, che comprende un parser attualmente incompleto.
 L'output di PHP-Parser è il seguente:
 
-\cite{Incollare codice php parser}
+\ref{parker}(Incollare codice php parser)
 
 Come mostrato nell'immagine è una rappresentazione ad alto livello del codice sorgente, sotto forma di array. Sono stati effettuati alcuni test per determinare l'efficacia di PHP-Parser: la scansione completa della codebase di Symfony2 funziona correttamente e richiede circa 35 secondi, un ottimo risultato viste le dimensioni della codebase in esame.
 
