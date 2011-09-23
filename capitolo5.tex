@@ -16,32 +16,31 @@ La versione attuale di PHP è la 5.3. In questa release il supporto agli oggetti
 Nonostante questi miglioramenti il linguaggio vive di un contrasto perenne tra le community di sviluppatori. Ritenuto spesso male organizzato e poco evoluto rispetto ai rivali che via via si stanno affermando in ambito web come Python e Ruby, viene molto apprezzato per la facilità di deploy. A livello enterprise è importante ricordare che, sebbene attraverso un meccanismo che traduce PHP in C chiamato HipHop\cite{hiphop}, la rete sociale più grande del mondo\footnote{http://www.facebook.com} ha il proprio codice sorgente in linguaggio PHP.
 
 \section{Caratteristiche del linguaggio}
-Php è un linguaggio di scripting, ovvero un linguaggio di programmazione interpretato. A differenza dei linguaggi di programmazione compilati, che compilano il proprio codice in linguaggio macchina prima dell'esecuzione, PHP viene eseguito per mezzo di un interprete.\\
+PHP è un linguaggio di scripting, ovvero un linguaggio di programmazione interpretato. A differenza dei linguaggi di programmazione compilati, che compilano il proprio codice in linguaggio macchina prima dell'esecuzione, il codice PHP viene eseguito per mezzo di un interprete.\\
 In ambito web viene utilizzato attraverso l'uso di un'estensione applicata al web server, per consentire la generazione dinamica di codice HTML. Per Apache, il web server più diffuso, l'estensione è chiamata mod\_php.\\
 PHP possiede un gran numero di librerie per eseguire ogni tipo di operazione, dall'elaborazione di immagini alla manipolazione di documenti XML fino alla crittografia.\\
-PHP non si basa su una specifica formale, l'unica documentazione della semantica è data dalla definizione del linguaggio nel codice sorgente della sua implementazione. Tale mancanza rende complessa per un tool di analisi la modellazione del comportamento del programma in esame.\\
-Biggar e Gregg\ref{parker}(CITAZIONE DI 
- PAPER) sono gli autori di phc, un compilatore alternativo rispetto a Zend che supporta solo codice PHP 4. Durante lo studio della semantica di PHP hanno avuto a che fare con la mancanza di un modello formale ed hanno riportato nel proprio studio le caratteristiche che hanno ritenuto ambigue e problematiche. Siccome l'analisi della semantica del linguaggio è necessaria anche nei tool di analisi statica, di seguito vengono riportate alcune problematiche da loro evidenziate:
+PHP non si basa su una specifica formale, l'unica documentazione della semantica del linguaggio è data dalla definizione nel codice sorgente dell'implementazione. Tale mancanza rende la modellazione del comportamento del programma in esame complessa per un tool di analisi.\\
+Biggar e Gregg sono gli autori di phc\cite{phc}, un compilatore alternativo rispetto a Zend che supporta solo codice PHP 4. Durante lo studio della semantica di PHP si sono scontrati con la mancanza di un modello formale per tale linguaggio ed hanno riportato nel proprio studio\cite{biggar} le caratteristiche che ritenute ambigue e problematiche. Siccome l'analisi della semantica del linguaggio è necessaria anche nei tool di analisi statica, di seguito vengono riportate alcune problematiche da loro evidenziate:
 \begin{itemize}
-\item Incongruenze tra PHP 4 e PHP 5: Le differenze implementative tra PHP 4 e PHP 5 rendono l'analisi statica del codice sorgente problematica. Un caso emblematico riguarda il passaggio di valori degli argomenti di un metodo che in PHP 4 avveniva di default per valore, in PHP 5 per riferimento. Benchè codice PHP 4 sia ormai datato questa differenza è ancora un vincolo importante per l'esecuzione di un'analisi statica efficiente.
-\item Il file di configurazione php.ini influisce sul programma in esame, ad esempio la direttiva \emph{include\_path} definisce i files che vengono automaticamente aggiunti alla codebase, mentre \emph{magic\_quotes\_gpc} cambia il modo secondo il quale le stringhe vengono gestite.
-\item Le nuove release di PHP possono alterare la semantica del linguaggio anche se contengono solo bugfix.
+\item \emph{Incongruenze tra PHP 4 e PHP 5}: Le differenze implementative tra PHP 4 e PHP 5 rendono l'analisi statica del codice sorgente problematica. Un caso emblematico riguarda il passaggio di variabili negli argomenti di un metodo che in PHP 4 avveniva di default per valore, in PHP 5 per riferimento. Benchè codice PHP 4 sia ormai datato questa differenza è ancora un vincolo importante per l'esecuzione di un'analisi statica compatibile.
+\item \emph{php.ini}: Il file di configurazione php.ini influisce sul programma in esame, ad esempio la direttiva \emph{include\_path} definisce i files che vengono automaticamente aggiunti alla codebase, mentre \emph{magic\_quotes\_gpc} cambia il modo secondo il quale le stringhe vengono gestite.
+\item \emph{Release}: Le nuove release di PHP possono alterare la semantica del linguaggio anche se contengono solo bugfix.
 \end{itemize}
 
 Oltre a queste problematiche la dinamicità del linguaggio comporta la presenza di alcune situazioni difficili da esaminare con la sola analisi statica. Tra queste:
 \begin{itemize}
-\item Valutazione del codice run-time: Il costrutto \emph{eval} consente di eseguire come istruzioni le sequenze di caratteri contenute in una stringa come se fossero codice sorgente. Il contenuto di tale stringa però non è conosciuto prima dell'esecuzione del programma, rendendo di fatto impossibile l'analisi di tale contenuto.
-\item Inclusione run-time di files esterni: In PHP è possibile definire l'inclusione di files a seconda dello stato di variabili valutate run-time. Il valore di tali variabili non è definibile tramite analisi statica.
-\item Tipizzazione dinamica dei dati: Il tipo di una variabile non necessita di essere dichiarato e può mutare in modo trasparente a run-time. Questa peculiarità del linguaggio rende complessa la tracciatura dei dati nel flusso di esecuzione poiché possono essere convertiti più volte in modo implicito.
-\item Duck typing: Valori in un oggetto possono essere aggiunti o rimossi in ogni momento dell'esecuzione, facendo si che non risulti possibile predire l'occupazione in memoria dell'oggetto dalla sua dichiarazione.
-\item Aliasing: E' possibile definire alias in grado di referenziare il valore di altre variabili. Tali alias sono mutabili e possono essere creati e distrutti run-time.
-\item Variabili di variabili: Il valore di una stringa può essere usato come indice di un'altra variabile. Ciò è possibile grazie all'uso di una tabella dei simboli al posto di rigide locazioni di memoria.
+\item \emph{Valutazione del codice run-time}: Il costrutto \emph{eval} consente di eseguire come istruzioni le sequenze di caratteri contenute in una stringa come se fossero codice sorgente. Il contenuto di tale stringa però non è conosciuto prima dell'esecuzione del programma, rendendo di fatto impossibile l'analisi di tale contenuto.
+\item \emph{Inclusione run-time di files esterni}: In PHP è possibile definire l'inclusione di files a seconda dello stato di variabili valutate run-time. Il valore di tali variabili non è definibile tramite analisi statica.
+\item \emph{Tipizzazione dinamica dei dati}: Il tipo di una variabile non necessita di essere dichiarato e può mutare in modo trasparente a run-time. Questa peculiarità del linguaggio rende complessa la tracciatura dei dati nel flusso di esecuzione poiché possono essere convertiti più volte in modo implicito.
+\item \emph{Duck typing}: Valori in un oggetto possono essere aggiunti o rimossi in ogni momento dell'esecuzione, facendo si che non risulti possibile predire l'occupazione in memoria dell'oggetto dalla sua dichiarazione.
+\item \emph{Aliasing}: E' possibile definire alias in grado di referenziare il valore di altre variabili. Tali alias sono mutabili e possono essere creati e distrutti run-time.
+\item \emph{Variabili di variabili}: Il valore di una stringa può essere usato come indice di un'altra variabile. Ciò è possibile grazie all'uso di una tabella dei simboli al posto di rigide locazioni di memoria.
 \end{itemize}
 
 E' importante poi ricordare come esistano alcune caratteristiche presenti in pressoché tutti i linguaggi che rendono le tecniche di analisi statica molto complesse: 
 \begin{itemize}
-\item Funzioni per la manipolazione di stringhe: la presenza di una libreria per la manipolazione di stringhe rende complessa l'analisi statica poiché è importante conoscere l'esatto significato di ogni funzione al fine di capire dove e come un valore tainted si può propagare.
-\item Espressioni regolari: la manipolazione di stringhe tramite espressioni regolari complica l'analisi. Teoricamente occorrerebbe comprendere il funzionamento dell'espressione regolare e di conseguenza capire se tale espressione è in grado di agire su valori tainted ed in che modo.
+\item \emph{Funzioni per la manipolazione di stringhe}: la presenza di una libreria per la manipolazione di stringhe rende complessa l'analisi statica poiché è importante conoscere l'esatto significato di ogni funzione al fine di capire dove e come un valore tainted si può propagare.
+\item \emph{Espressioni regolari}: la manipolazione di stringhe tramite espressioni regolari complica l'analisi. Teoricamente occorrerebbe comprendere il funzionamento dell'espressione regolare e di conseguenza capire se tale espressione è in grado di agire su valori tainted ed in che modo.
 \end{itemize}
 
 \section{Modalità di analisi di codice PHP}
@@ -55,16 +54,64 @@ L'input per un tool di analisi statica non è altro che l'output di una delle va
 \end{itemize}
 Il codice sorgente non è mai stato utilizzato efficacemente come input nel campo dell'analisi statica. Le regole lessicali che governano il linguaggio rendono estremamente complessa l'interpretazione del codice, che necessita di essere processato per mezzo di espressioni regolari.\\
 Per tale motivo i primi tool che eseguivano analisi statica di codice PHP prendevano in input uno stream di tokens, ovvero una rappresentazione delle istruzioni indipendente dalle regole lessicali del linguaggio. Tale output è frutto della fase di lexical analysis nel processo di interpretazione del codice.
-Si citano due librerie in grado di convertire da codice sorgente a stream di tokens, \emph{tokenizer}, inclusa nella release di PHP e \emph{PHP\_TokenStream}.
+Si citano due librerie in grado di convertire da codice sorgente a stream di tokens, \emph{tokenizer}\cite{tokenizer}, inclusa nella release di PHP e \emph{PHP\_TokenStream}\cite{tokenstream}.
 
-\ref{parker}(ESEMPIO TOKENIZER)
-\ref{parker}(ESEMPIO TOKENSTREAM)
+La prima libreria ha un output più semplice, composto da un array di tre elementi: token, numero di riga e corrispondenza in codice PHP, come mostrato nell'esempio sottostante (nel primo listing è riportato il codice sorgente, nel secondo la corrispondente rappresentazione sotto forma di tokens). \\
 
-La prima libreria ha un output più semplice, composto da un array di tre elementi: token, numero di riga e corrispondenza in codice PHP. La seconda libreria invece fornisce come output una serie di tokens rappresentati come oggetti.
+\begin{lstlisting}[language=PHP]
+<?php 
+function foo() {	if (TRUE) { 
+		$foo = TRUE;	} else {
+		$foo = FALSE;
+	}
+	return NULL;
+}
+?>
+\end{lstlisting}
+
+\begin{lstlisting}
+Array (	[0] => Array (
+		[0] => 368			T_OPEN_TAG
+		[1] => <?php\n		text 
+		[2] => 1				line number	)	[1] => Array (		[0] => 334			T_FUNCTION
+		[1] => function 
+		[2] => 2	)	[2] => Array (		[0] => 371			T_WHITESPACE 
+		[1] => 
+		[2] => 2	)	[3] => Array (		[0] => 307			T_STRING 
+		[1] => foo 
+		[2] => 2	)	[4] => ( 
+		.
+		.
+		.
+\end{lstlisting}
+
+La seconda libreria invece fornisce come output una serie di tokens rappresentati come oggetti, riportati nell'esempio sottostante.\\
+
+\begin{lstlisting}
+PHP_Token_Stream Object (	[flags:SplDoublyLinkedList:private] => 0 
+	[dllist:SplDoublyLinkedList:private] => Array
+	(
+		[0] => PHP_Token_OPEN_TAG Object 
+		(			[id:protected] => 368
+			[text:protected] => <?php\n
+			[line:protected] => 1		)
+		.
+		.
+		
+		[4] => PHP_Token_OPEN_BRACKET Object 
+		(
+			[id:protected] => 501
+			[text:protected] => (
+			[line:protected] => 2		)
+		.
+		.
+		
+\end{lstlisting}
+
 Al termine della conversione, i tool di analisi statica possono così operare su una struttura più semplice da parsare rispetto al puro codice sorgente.
 
-La fase successiva nell'interpretazione di codice PHP consiste nella syntax analysis, ovvero nel parsing per ottenere un abstract syntax tree. Tre librerie sono state individuate per la realizzazione di tale fase: \emph{PHP\_Reflection\_AST}, \emph{parse\_tree} e \emph{PHP\_Parser}. Le prime due risultano abbandonate da anni, non supportano quindi i costrutti delle più recenti release di PHP, l'ultima, sebbene rilasciata come alfa, è attualmente l'unica libreria scritta in PHP in grado di generare un abstract syntax tree di codice sorgente basato su PHP 5.3. Esiste poi un ulteriore promettente tool, chiamato \emph{PHP\_Depend}, che non si occupa di eseguire analisi statica ma analisi delle metriche di codice PHP e che contiene al suo interno una serie di librerie in grado di generare un AST parziale.
+La fase successiva nell'interpretazione di codice PHP consiste nella syntax analysis, ovvero nel parsing per ottenere un abstract syntax tree. Tre librerie sono state individuate per la realizzazione di tale fase: \emph{PHP\_Reflection\_AST}, \emph{parse\_tree}\cite{parsetree} e \emph{PHP-Parser}\cite{phpparser}. Le prime due risultano abbandonate da anni, non supportano quindi i costrutti delle più recenti release di PHP; l'ultima, sebbene rilasciata come alfa, è attualmente l'unica libreria scritta in PHP in grado di generare un abstract syntax tree di codice sorgente basato su PHP 5.3. Esiste poi un ulteriore promettente tool, chiamato \emph{PHP\_Depend}\cite{phpdepend}, che non si occupa di eseguire analisi statica del codice ma effettua analisi delle metriche. Al suo interno contiene una serie di librerie in grado di generare un AST parziale, derivate da \emph{PHP\_Reflection\_AST}.
 
-L'ultima fase che produce risultati validi per un'analisi statica è la fase di bytecode generation. La libreria che si occupa di produrre tale output è \emph{Bytekit} di Stefan Esser. Oltre a riportare una rappresentazione utente del bytecode generato in fase di compilazione, fornisce anche informazioni sul flusso di istruzioni in esecuzione. L'output di questa fase è però a basso livello e complesso da parsare durante un'analisi statica.
+L'ultima fase che produce risultati validi per un'analisi statica è la fase di bytecode generation. La libreria che si occupa di produrre tale output è \emph{Bytekit}\cite{bytekit} di Stefan Esser. Oltre a riportare una rappresentazione utente del bytecode generato in fase di compilazione, fornisce anche informazioni sul flusso di istruzioni in esecuzione. L'output di questa fase è però a basso livello e complesso da parsare durante un'analisi statica.
 
 I tools analizzati nel documento corrente utilizzano come input valori provenienti dalle fasi di lexical analysis o syntax analysis, che forniscono una rappresentazione ad alto livello del flusso di istruzioni.

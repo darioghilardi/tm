@@ -1,8 +1,48 @@
 \begin{thebibliography}{10}
 
+\bibitem{bytekit}
+{Bytekit}.
+\newblock \url{https://github.com/Tyrael/bytekit}.
+
+\bibitem{jpc}
+{CUP: LALR Parser generator in Java}.
+\newblock \url{http://www2.cs.tum.edu/projects/cup/}.
+
+\bibitem{jflex}
+{Jflex: The fast scanner generator for Java}.
+\newblock \url{http://jflex.de}.
+
+\bibitem{parsetree}
+{Parse\_Tree}.
+\newblock \url{http://pecl.php.net/package/parse_tree}.
+
+\bibitem{tokenizer}
+{PHP built-in tokenizer library}.
+\newblock \url{http://php.net/manual/en/book.tokenizer.php}.
+
+\bibitem{phpparser}
+{PHP-Parser}.
+\newblock \url{https://github.com/nikic/PHP-Parser}.
+
+\bibitem{phpdepend}
+{PHP\_Depend}.
+\newblock \url{http://http://pdepend.org}.
+
+\bibitem{tokenstream}
+{PHP\_tokenstream}.
+\newblock \url{https://github.com/sebastianbergmann/php-token-stream}.
+
+\bibitem{pixyweb}
+{Pixy official website}.
+\newblock \url{http://pixybox.seclab.tuwien.ac.at/pixy/webinterface.php}.
+
 \bibitem{flawfinder}
 {Flawfinder}.
 \newblock \url{http://www.dwheeler.com/flawfinder/}, 2010.
+
+\bibitem{phc}
+{phc: Documentazione}.
+\newblock \url{http://www.phpcompiler.org/doc/latest/grammar.html}, 2010.
 
 \bibitem{pql}
 {PQL: A language for expressing patterns of events on objects. It provides a
@@ -46,6 +86,11 @@ D.~Balzarotti, M.~Cova, V.~V. Felmetsger, N.~Jovanovic, E.~Kirda, C.~Kruegel,
 Tim Berners~Lee, Roy Fielding, and Larry Masinter.
 \newblock {RFC 3986, Uniform Resource Identifier (uri): Generic Syntax}.
 \newblock \url{http://datatracker.ietf.org/doc/rfc3986/}, 2005.
+
+\bibitem{biggar}
+Paul Biggar and David Gregg.
+\newblock {Static analysis of dynamic scripting languages}, 2009.
+\newblock Draft.
 
 \bibitem{Bilge2009}
 Leyla Bilge, Thorsten Strufe, Davide Balzarotti, and Engin Kirda.
