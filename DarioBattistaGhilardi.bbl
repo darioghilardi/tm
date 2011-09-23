@@ -4,9 +4,18 @@
 {Bytekit}.
 \newblock \url{https://github.com/Tyrael/bytekit}.
 
+\bibitem{codesecure}
+{Codesecure}.
+\newblock \url{http://www.armorize.com/codesecure/}.
+
 \bibitem{jpc}
 {CUP: LALR Parser generator in Java}.
 \newblock \url{http://www2.cs.tum.edu/projects/cup/}.
+
+\bibitem{fortify}
+{Fortify Source Code Analyzer}.
+\newblock
+  \url{https://www.fortify.com/products/hpfssc/source-code-analyzer.html}.
 
 \bibitem{jflex}
 {Jflex: The fast scanner generator for Java}.
@@ -24,6 +33,16 @@
 {PHP-Parser}.
 \newblock \url{https://github.com/nikic/PHP-Parser}.
 
+\bibitem{phpsat}
+{php-sat: Static Analysis for PHP}.
+\newblock \url{http://www.program-transformation.org/PHP/PhpSat}.
+
+\bibitem{codinghorror}
+{PHP sucks but it doesn't matter}.
+\newblock
+  \url{http://www.codinghorror.com/blog/2008/05/php-sucks-but-it-doesnt-matter%
+.html}.
+
 \bibitem{phpdepend}
 {PHP\_Depend}.
 \newblock \url{http://http://pdepend.org}.
@@ -35,6 +54,14 @@
 \bibitem{pixyweb}
 {Pixy official website}.
 \newblock \url{http://pixybox.seclab.tuwien.ac.at/pixy/webinterface.php}.
+
+\bibitem{symfony}
+{Symfony Framework}.
+\newblock \url{http://symfony.com/}.
+
+\bibitem{vulture}
+{Vulture: Github repository}.
+\newblock \url{https://github.com/ingo86/vulture}.
 
 \bibitem{flawfinder}
 {Flawfinder}.
@@ -67,14 +94,6 @@ Marco Balduzzi.
 \newblock {HTTP Parameter Pollution Vulnerabilities in Web Applications}.
 \newblock In {\em BlackHat Europe 2011}, 2011.
 
-\bibitem{Balduzzi}
-Marco Balduzzi, Christian Platzer, Thorsten Holz, Engin Kirda, Davide
-  Balzarotti, and Christopher Kruegel.
-\newblock {Abusing Social Networks for Automated User Profiling}.
-\newblock In {\em Preceeding of the 13th international conference on Recent
-  advances in intrusion detection}, pages 422--441, Berlin, Heidelberg, 2010.
-  Springer-Verlag.
-
 \bibitem{saner}
 D.~Balzarotti, M.~Cova, V.~V. Felmetsger, N.~Jovanovic, E.~Kirda, C.~Kruegel,
   and G.~Vigna.
@@ -92,29 +111,23 @@ Paul Biggar and David Gregg.
 \newblock {Static analysis of dynamic scripting languages}, 2009.
 \newblock Draft.
 
-\bibitem{Bilge2009}
-Leyla Bilge, Thorsten Strufe, Davide Balzarotti, and Engin Kirda.
-\newblock {All Your Contacts Are Belong to Us : Automated Identity Theft
-  Attacks on Social Networks}.
-\newblock In {\em Preceedings of the 19th international conference on World
-  Wide Web (WWW)}, 2009.
-
-\bibitem{Bowen}
-B.~Bowen, S.~Hershkop, A.~Keromytis, and S.~Stolfo.
-\newblock {Baiting inside attackers using decoy documents}.
-\newblock {\em Security and Privacy in Communication Networks}, pages 51--70,
-  2009.
-
-\bibitem{Chew}
-Monica Chew and Ben Laurie.
-\newblock {( Under ) mining Privacy in Social Networks}.
-\newblock In {\em Preecedings of Web 2.0 Security and Privacy Workshop (W2SP)},
-  2008.
-
 \bibitem{its4}
 Cigital.
 \newblock {ITS4: A Static Vulnerability Scanner for C and C++ Code}.
 \newblock \url{http://www.cigital.com/its4/}, 2010.
+
+\bibitem{rips}
+Johannes Dahse.
+\newblock {RIPS - A static source code analyser for vulnerabilities in PHP
+  scripts}.
+\newblock \url{http://php-security.org/downloads/rips.pdf}.
+\newblock Ruhr-University Bochum.
+
+\bibitem{depoel}
+Nico~L. de~Poel.
+\newblock {Automated Security Review of PHP Web Applications with Static Code
+  Analysis}.
+\newblock Master's thesis, May 2010.
 
 \bibitem{dipaola}
 Stefano di~Paola and Luca Carrettoni.
@@ -123,73 +136,16 @@ Stefano di~Paola and Luca Carrettoni.
   \url{https://www.owasp.org/images/b/ba/AppsecEU09_CarettoniDiPaola_v0.8.pdf},
   2009.
 
-\bibitem{Dwyer2007}
-Catherine Dwyer and Starr~Roxanne Hiltz.
-\newblock {Trust and privacy concern within social networking sites : A
-  comparison of Facebook and MySpace}.
-\newblock In {\em Preceedings of the Thirteenth Americas Conference on
-  Information Systems (AMCIS)}, 2007.
-
-\bibitem{fitzpatrick}
-Brad Fitzpatrick and David Recordon.
-\newblock {Thoughts on the Social Graph}.
-\newblock \url{http://bradfitz.com/social-graph-problem}, 2007.
-
 \bibitem{rats}
 Fortify.
 \newblock {RATS: Rough Auditing Tool for Security}.
 \newblock \url{http://www.fortify.com/security-resources/rats.jsp}, 2010.
-
-\bibitem{Gross2005}
-Ralph Gross, Alessandro Acquisti, and H~John~Heinz Iii.
-\newblock {Information Revelation and Privacy in Online Social Networks ( The
-  Facebook case )}.
-\newblock {\em ACM Workshop on Privacy in the Electronic Society (WPES)}, 2005.
-
-\bibitem{nytimesgoogle}
-Miguel Helft.
-\newblock Google thinks it knows your friends.
-\newblock
-  \url{http://bits.blogs.nytimes.com/2007/12/26/google-thinks-it-knows-your-fr%
-iends/}.
-
-\bibitem{fbprivacy}
-Facebook Inc.
-\newblock Facebook privacy guidelines.
-\newblock \url{http://www.facebook.com/policy.php}.
-
-\bibitem{sto}
-Jesper~M. Johansson and Roger Grimes.
-\newblock Security-through-obscurity.
-\newblock
-  \url{http://technet.microsoft.com/en-us/magazine/2008.06.obscurity.aspx}.
 
 \bibitem{pixy}
 Nenad Jovanovic, Christopher Kruegel, and Engin Kirda.
 \newblock {Pixy: A Static Analysis Tool for Detecting Web Application
   Vulnerabilities (Short Paper)}.
 \newblock In {\em 2006 IEEE Symposium on Security and Privacy}, 2006.
-
-\bibitem{Korolova2010}
-Aleksandra Korolova.
-\newblock {Privacy Violations Using Microtargeted Ads : A Case Study}.
-\newblock 2010.
-
-\bibitem{Mackay}
-W.~Mackay.
-\newblock {Triggers and barriers to customizing software}.
-\newblock In {\em Preceedings of CHI'91}, pages 153--160. ACM Press, 1991.
-
-\bibitem{mitnick}
-Kevin~D. Mitnick.
-\newblock {\em The art of deception}.
-\newblock John Wiley \& Sons, Inc., 2002.
-
-\bibitem{Nikiforakis}
-Nick Nikiforakis, Marco Balduzzi, Steven~Van Acker, Wouter Joosen, Davide
-  Balzarotti, and Sophia Antipolis.
-\newblock {Exposing the Lack of Privacy in File Hosting Services}.
-\newblock {\em Sophia}, 2010.
 
 \bibitem{topten}
 OWASP.
@@ -214,16 +170,5 @@ Alan Turing.
   Entscheidungsproblem}.
 \newblock In {\em Proceedings of the London Mathematical Society}, volume~42,
   pages 230--265, 1936.
-
-\bibitem{Yuill}
-J.~Yuill, M.~Zappe, D.~Denning, and F.~Feer.
-\newblock {Honey- files: deceptive files for intrusion detection}.
-\newblock In {\em Proceedings from the Fifth Annual IEEE SMC Information
-  Assurance Workshop}, pages 116--122, 2004.
-
-\bibitem{makingcontrol}
-Mark Zuckerberg.
-\newblock Making control simple.
-\newblock \url{http://blog.facebook.com/blog.php?post=391922327130}.
 
 \end{thebibliography}
