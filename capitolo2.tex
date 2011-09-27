@@ -129,6 +129,31 @@ Le altre vulnerabilità citate in OWASP Top Ten ma non riportate nella sezioni p
 \item \emph{Failure to restrict URL access}: E' comune per un'applicazione web controllare i permessi di accesso all'URL prima di visualizzare contenuti protetti. Tuttavia le applicazioni necessitano che questi controlli vengano eseguiti ogni volta che queste pagine vengono visualizzate o gli attaccanti saranno in grado di costruire URL appositi per accedere a tali risorse senza i permessi.
 \item \emph{Insufficient transport layer protection}: Le applicazioni spesso falliscono nel proteggere la confidenzialità e l'integrità del traffico di rete. Questo poiché talvolta utilizzano algoritmi non corretti, certificati non validi o scaduti, non implementano SSL oppure falliscono nell'implementare le best practice per questa problematica.
 \item \emph{Unvalidated redirects and forwards}: Può capitare che un'applicazione redirezioni l'utente verso altre pagine o siti web, usando dati non sicuri per determinare le pagine di destinazione. Senza l'appropriata validazione un attaccante può redirezionare la vittima verso phishing verso siti contenenti malware.
+
+Nella tabella \ref{toptenrisk} riepilogativa che riassume i fattori di rischio per ognuna delle 10 vulnerabilità della top ten.
+
+\begin{table}[!h]
+\center
+{\footnotesize
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Vulnerabilità & Facilità sfruttamento & Diffusione & Individuabilità & Impatto\\
+\hline
+Injections & Facile & Comune & Media & Grave\\
+XSS & Media & Elevata & Facile & Medio\\
+Broken authentication & Media & Comune & Media & Grave\\
+Unsafe Direct object reference & Facile & Comune & Facile & Medio\\
+CSRF & Media & Diffuso & Facile & Medio\\
+Security misconfiguration & Facile & Comune & Facile & Medio\\
+Insecure cryptographic storage & Difficile & Non comune & Difficile & Grave\\
+Failure URL Access restriction & Facile & Non comune & Media & Medio\\
+Insuff. transport layer protection & Difficile & Comune & Facile & Medio\\
+Unvalidated redirects & Media & Non comune & Facile & Medio\\
+\hline
+\end{tabular}}
+\caption{Dettagli sui fattori di rischio (da OWASP Top Ten)}
+\label{toptenrisk}
+\end{table}
 \end{itemize}
 
 \subsection{Http Parameter Pollution}
@@ -205,10 +230,20 @@ Per tali motivi è opportuno che l'analisi di sicurezza venga implementata nello
 \begin{figure}[!h]
 \centering
 \includegraphics[width=15cm]{sdlc.jpg}
-\caption{Software development life cycle}\label{sdlc}
+\caption{Software development life cycle (da OWASP Code Review Guide)}\label{sdlc}
 \end{figure}
 
 L'immagine \ref{sdlc} mostra come la sicurezza non sia una fase all'interno del processo di sviluppo, bensì un processo, da attuare costantemente.\\
 E' fondamentale identificare il prima possibile un problema di sicurezza, poiché ciò comporta costi minori di fixing e riduce in modo drastico la finestra di esposizione, presente invece nel modello patch-and-penetrate, dominante fino a pochi anni fa. \\
 Introdurre l'analisi di sicurezza nel SDLC non è però semplice, occorre una maggiore conoscenza delle problematiche e qualche sistema in grado di automatizzare la ricerca di errori comuni, che abbia come requisito la rapidità di scansione e che possa fornire feedbacks immediati agli sviluppatori.\\
 Per questo compito, oltre alla sempre necessaria formazione degli sviluppatori, l'analisi statica può rivelarsi un aiuto efficace.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=13.5cm]{iterative.png}
+\caption{Modello iterativo con analisi statica}\label{iterativo}
+\end{figure}
+
+Nella figura \ref{iterativo}, si riporta una versione modificata del modello iterativo al fine di evidenziare il posizionamento dell'analisi statica.
+
+

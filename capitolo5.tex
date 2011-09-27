@@ -10,7 +10,14 @@ Lerdorf decise di rilasciare PHP Tools sotto licenza GPL, allo scopo di organizz
 
 L'idea di integrare mSQL all’interno delle pagine web fu indubbiamente ciò che contribuì alla rapida diffusione di PHP e permise la creazione di quel gruppo di sviluppatori che da alcuni mesi Lerdorf cercava di ampliare.
 Con l’avvento della versione 2.0 il set di script PHP e il parser FI vennero completamente riscritti ed il progetto iniziò a diffondersi globalmente conquistando il traguardo della presenza sull’1\% dei domini web. I file di PHP 2.0 avevano estensione .phtml ed il parser FI poteva comunicare con più di una tipologia di database (mSQL, Postgres95 e il neonato mySQL).\\
-La vera svolta nel progetto però avvenne alla fine del 1997 quando due israeliani (Zeev Suraski e Andi Gutmans) svilupparono Zend Engine, un nuovo parser che nel giro di 8 mesi sostituì il parser di PHP/FI 2.0. Nel 1993 venne rilasciato PHP 3, che oltre a segnare l’esplosione di PHP come linguaggio di scripting per il web, segnò la fine dell’ era Lerdorf all’interno del team di sviluppo. Infatti il creatore di PHP iniziò a defilarsi mentre nel team crescevano le personalità di Suraski e Gutmans. PHP 3 fu anche la release che cambiò il significato dell'acronimo PHP, non più Personal Home Page ma, PHP: Hypertext Preprocessor.\\
+La vera svolta nel progetto però avvenne alla fine del 1997 quando due israeliani (Zeev Suraski e Andi Gutmans) svilupparono Zend Engine, un nuovo parser che nel giro di 8 mesi sostituì il parser di PHP/FI 2.0. Nel 1993 venne rilasciato PHP 3, che oltre a segnare l’esplosione di PHP come linguaggio di scripting per il web, segnò la fine dell’ era Lerdorf all’interno del team di sviluppo. Infatti il creatore di PHP iniziò a defilarsi mentre nel team crescevano le personalità di Suraski e Gutmans. PHP 3 fu anche la release che cambiò il significato dell'acronimo PHP, non più Personal Home Page ma, PHP: Hypertext Preprocessor. Il logo di PHP è riportato in figura \ref{php}.\\
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=7cm]{php.png}
+\caption{Logo di PHP (da php.net)}\label{php}
+\end{figure}
+
 Nel 2000 venne rilasciata la quarta versione di PHP, con notevoli miglioramenti sotto il fronte delle API e della velocità di esecuzione. Un grosso cambiamento della versione 4 riguardò la licenza, GNU General Public License (GPL) venne sostituita da PHP4 License, maggiormente restrittiva sebbene sempre open source. Fu questa release a consolidare il ruolo di PHP nel mondo dei linguaggi di programmazione orientati al web. Quattro anni dopo fu rilasciato PHP 5, con un migliorato supporto alla programmazione ad oggetti e il nuovo supporto ai web services.\\
 La versione attuale di PHP è la 5.3. In questa release il supporto agli oggetti è stato esteso con l'aggiunta dei namespace, ovvero un sistema che permette di raggruppare variabili, classi e funzioni all’interno di un determinato spazio dei nomi al fine da diminuire le possibilità di collisione. Inoltre risultano ora supportati i late static binding e le closures.\\
 Nonostante questi miglioramenti il linguaggio vive di un contrasto perenne tra le community di sviluppatori. Ritenuto spesso male organizzato e poco evoluto rispetto ai rivali che via via si stanno affermando in ambito web come Python e Ruby, viene molto apprezzato per la facilità di deploy. A livello enterprise è importante ricordare che, sebbene attraverso un meccanismo che traduce PHP in C chiamato HipHop\cite{hiphop}, la rete sociale più grande del mondo\footnote{http://www.facebook.com} ha il proprio codice sorgente in linguaggio PHP.
@@ -60,8 +67,10 @@ La prima libreria ha un output più semplice, composto da un array di tre elemen
 
 \begin{lstlisting}[language=PHP]
 <?php 
-function foo() {	if (TRUE) { 
-		$foo = TRUE;	} else {
+function foo() {
+	if (TRUE) { 
+		$foo = TRUE;
+	} else {
 		$foo = FALSE;
 	}
 	return NULL;
@@ -70,16 +79,28 @@ function foo() {	if (TRUE) {
 \end{lstlisting}
 
 \begin{lstlisting}
-Array (	[0] => Array (
+Array (
+	[0] => Array (
 		[0] => 368			T_OPEN_TAG
 		[1] => <?php\n		text 
-		[2] => 1				line number	)	[1] => Array (		[0] => 334			T_FUNCTION
+		[2] => 1				line number
+	)
+	[1] => Array (
+		[0] => 334			T_FUNCTION
 		[1] => function 
-		[2] => 2	)	[2] => Array (		[0] => 371			T_WHITESPACE 
+		[2] => 2
+	)
+	[2] => Array (
+		[0] => 371			T_WHITESPACE 
 		[1] => 
-		[2] => 2	)	[3] => Array (		[0] => 307			T_STRING 
+		[2] => 2
+	)
+	[3] => Array (
+		[0] => 307			T_STRING 
 		[1] => foo 
-		[2] => 2	)	[4] => ( 
+		[2] => 2
+	)
+	[4] => ( 
 		.
 		.
 		.
@@ -88,13 +109,16 @@ Array (	[0] => Array (
 La seconda libreria invece fornisce come output una serie di tokens rappresentati come oggetti, riportati nell'esempio sottostante.\\
 
 \begin{lstlisting}
-PHP_Token_Stream Object (	[flags:SplDoublyLinkedList:private] => 0 
+PHP_Token_Stream Object (
+	[flags:SplDoublyLinkedList:private] => 0 
 	[dllist:SplDoublyLinkedList:private] => Array
 	(
 		[0] => PHP_Token_OPEN_TAG Object 
-		(			[id:protected] => 368
+		(
+			[id:protected] => 368
 			[text:protected] => <?php\n
-			[line:protected] => 1		)
+			[line:protected] => 1
+		)
 		.
 		.
 		
@@ -102,7 +126,8 @@ PHP_Token_Stream Object (	[flags:SplDoublyLinkedList:private] => 0
 		(
 			[id:protected] => 501
 			[text:protected] => (
-			[line:protected] => 2		)
+			[line:protected] => 2
+		)
 		.
 		.
 		
