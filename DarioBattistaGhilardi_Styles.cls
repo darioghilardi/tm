@@ -33,22 +33,22 @@
 \DeclareOption{titoliSinistra}{\@titoliSinistratrue}
 \DeclareOption{prefazione}{\@prefazionetrue}
 \DeclareOption{ringraziamenti}{\@ringraziamentitrue}
-%\DeclareOption{listaFigureInizio} {
-%	\@listaFigureFinefalse
-%	\@listaFigureIniziotrue
-%}
-%\DeclareOption{listaFigureFine} {
-%	\@listaFigureFinetrue
-%	\@listaFigureIniziofalse
-%}
-%\DeclareOption{listaTabelleInizio} {
-%	\@listaTabelleFinefalse
-%	\@listaTabelleIniziotrue
-%}
-%\DeclareOption{listaTabelleFine} {
-%	\@listaTabelleFinetrue
-%	\@listaTabelleIniziofalse
-%}
+\DeclareOption{listaFigureInizio} {
+	\@listaFigureFinefalse
+	\@listaFigureIniziotrue
+}
+\DeclareOption{listaFigureFine} {
+	\@listaFigureFinetrue
+	\@listaFigureIniziofalse
+}
+\DeclareOption{listaTabelleInizio} {
+	\@listaTabelleFinefalse
+	\@listaTabelleIniziotrue
+}
+\DeclareOption{listaTabelleFine} {
+	\@listaTabelleFinetrue
+	\@listaTabelleIniziofalse
+}
 \DeclareOption{righeNumerate} {
 	\@righeNumeratetrue
 	\@righeNumeratePerPaginafalse
