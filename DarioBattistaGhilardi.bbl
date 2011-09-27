@@ -21,6 +21,10 @@
 {Jflex: The fast scanner generator for Java}.
 \newblock \url{http://jflex.de}.
 
+\bibitem{fowler}
+{Martin Fowler: Continuous integration}.
+\newblock \url{http://martinfowler.com/articles/continuousIntegration.html}.
+
 \bibitem{parsetree}
 {Parse\_Tree}.
 \newblock \url{http://pecl.php.net/package/parse_tree}.
